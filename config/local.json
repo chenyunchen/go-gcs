@@ -1,0 +1,12 @@
+{
+  "googlecloudstorage":{
+      "serviceAccountPEM": "key.pem"
+  },
+  "app":{
+        "brand":{
+            "name":"",
+            "identifier":""
+        },
+        "version":"local"
+    }
+}
