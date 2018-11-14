@@ -1,12 +1,9 @@
 {
   "googlecloudstorage":{
-      "serviceAccountPEM": "key.pem"
+      "projectId": "jkopay-5566",
+      "bucketName": "jkopay-test",
+      "googleAccessId": "jkopay@jkopay-5566.iam.gserviceaccount.com",
+      "serviceAccountPem": "key.pem"
   },
-  "app":{
-        "brand":{
-            "name":"",
-            "identifier":""
-        },
-        "version":"local"
-    }
+  "version": "local"
 }

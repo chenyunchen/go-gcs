@@ -7,7 +7,10 @@ import (
 
 // GoogleCloudStorageConfig is the structure for Google Cloud storage Config
 type GoogleCloudStorageConfig struct {
-	ServiceAccountPEM string `json:"serviceAccountPEM"`
+	ProjectId         string `json:"projectId"`
+	BucketName        string `json:"bucketName"`
+	ServiceAccountPEM string `json:"serviceAccountPem"`
+	GoogleAccessId    string `json:"GoogleAccessId"`
 }
 
 // Service is the structure for Service
