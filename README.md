@@ -8,10 +8,17 @@
 $ openssl pkcs12 -in key.p12 -passin pass:notasecret -out key.pem -nodes
 ```
 
-3. go test ./src/...
+3. Run the testing.
 
-4. go run src/cmd/gcs-server/main.go
+```bash
+go test ./src/...
+```
 
+4. Run the server.(Signurl API: http://localhost:7890/v1/signurl)
+
+```bash
+go run src/cmd/gcs-server/main.go
+```
 
 ## Overview
 
