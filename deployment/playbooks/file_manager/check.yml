@@ -1,0 +1,14 @@
+---
+
+- hosts: file_manager_host
+  tasks:
+  - name: file_manager
+    import_role:
+      name: file_manager
+      tasks_from: check.yml
+
+  - debug: msg="{{ check_file_manager_run_res_fact.rc }}"
+
+  - fail:
+      msg: "{{ app_name }} not started"
+    when: check_file_manager_run_res_fact.rc != 0

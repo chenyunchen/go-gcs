@@ -1,0 +1,8 @@
+- name: Check if {{ app_exe }} runs on the specific port
+  become: True
+  shell: ss -tp state listening sport = :443 | grep '{{ app_exe }}'
+  register: check_file_manager_run_res
+  failed_when: false
+
+- name: Set fact
+  set_fact: check_file_manager_run_res_fact={{ check_file_manager_run_res }}

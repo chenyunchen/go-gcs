@@ -1,0 +1,8 @@
+---
+
+- hosts: file_manager_host
+  tasks:
+  - name: Stop file manager
+    import_role:
+      name: file_manager
+      tasks_from: stop.yml

@@ -1,0 +1,32 @@
+- name: Install rsync
+  become: True
+  yum:
+    name: rsync
+
+- name: Create directory
+  file:
+    path: "{{ app_dest }}"
+    state: directory
+
+- set_fact:
+    config_dir: "{{ app_dest }}/config"
+
+- name: Create the config directory
+  file:
+    path: "{{ config_dir }}"
+    state: directory
+
+- name: Copy files to "{{ app_dest }}"
+  synchronize:
+    src: "./"
+    dest: "{{ app_dest }}"
+    copy_links: yes
+
+- name: Create local.json
+  template: src=local.json.j2 dest="{{ config_dir }}/local.json"
+
+- name: Start {{ app_exe }}
+  become: True
+  shell: nohup ./{{ app_exe }} -port=443  1>/dev/null 2>&1 &
+  args:
+    chdir: "{{ app_dest }}"
