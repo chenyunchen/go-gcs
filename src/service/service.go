@@ -27,3 +27,9 @@ func New(cf config.Config) *Container {
 		Validator:          validate,
 	}
 }
+
+// NewContainer will new a container
+func NewContainer(configPath string) *Container {
+	cf := config.MustRead(configPath)
+	return New(cf)
+}
