@@ -1,4 +1,4 @@
-package googlecloudstorage
+package storage
 
 import (
 	"encoding/hex"
@@ -17,8 +17,8 @@ import (
 // SignURL will sign url to google cloud storage
 func SignURL(sp *service.Container, path string, fileName string, contentType string, method string, expires time.Time) (entity.SignedUrl, error) {
 	opts := storage.SignedURLOptions{
-		GoogleAccessID: sp.Config.GoogleCloudStorage.GoogleAccessId,
-		PrivateKey:     sp.GoogleCloudStorage.PrivateKey,
+		GoogleAccessID: sp.Config.GoogleCloud.ClientEmail,
+		PrivateKey:     []byte(sp.Config.GoogleCloud.PrivateKey),
 		Method:         method,
 		Expires:        expires,
 		ContentType:    contentType,
@@ -30,7 +30,7 @@ func SignURL(sp *service.Container, path string, fileName string, contentType st
 	rand.Read(b)
 	hashFileName := fmt.Sprintf("%s_%s", hex.EncodeToString(b), r.Replace(fileName))
 
-	su, err := storage.SignedURL(sp.Config.GoogleCloudStorage.BucketName, path+hashFileName, &opts)
+	su, err := storage.SignedURL(sp.Config.Storage.BucketName, path+hashFileName, &opts)
 	if err != nil {
 		return entity.SignedUrl{}, err
 	}
@@ -54,7 +54,7 @@ func SignURL(sp *service.Container, path string, fileName string, contentType st
 }
 
 // CreateGCSGroupSignedUrl will sign group url by google cloud storage
-func CreateGCSGroupSignedUrl(sp *service.Container, fileName string, contentType string, payload string) (entity.SignedUrl, error) {
+func CreateGCSGroupSignedUrl(sp *service.Container, userId string, fileName string, contentType string, payload string) (entity.SignedUrl, error) {
 	method := "PUT"
 	expires := time.Now().Add(time.Second * 60)
 
@@ -64,13 +64,13 @@ func CreateGCSGroupSignedUrl(sp *service.Container, fileName string, contentType
 		return entity.SignedUrl{}, err
 	}
 
-	path := fmt.Sprintf("Group/%s/%s/", groupPayload.GroupId, groupPayload.From)
+	path := fmt.Sprintf("Group/%s/%s/", groupPayload.GroupId, userId)
 
 	return SignURL(sp, path, fileName, contentType, method, expires)
 }
 
 // CreateGCSSingleSignedUrl will sign single url by google cloud storage
-func CreateGCSSingleSignedUrl(sp *service.Container, fileName string, contentType string, payload string) (entity.SignedUrl, error) {
+func CreateGCSSingleSignedUrl(sp *service.Container, userId string, fileName string, contentType string, payload string) (entity.SignedUrl, error) {
 	method := "PUT"
 	expires := time.Now().Add(time.Second * 60)
 
@@ -80,7 +80,7 @@ func CreateGCSSingleSignedUrl(sp *service.Container, fileName string, contentTyp
 		return entity.SignedUrl{}, err
 	}
 
-	path := fmt.Sprintf("Single/%s/%s/", singlePayload.From, singlePayload.To)
+	path := fmt.Sprintf("Single/%s/%s/", userId, singlePayload.To)
 
 	return SignURL(sp, path, fileName, contentType, method, expires)
 }

@@ -1,4 +1,4 @@
-package googlecloudstorage
+package storage
 
 import (
 	"testing"
@@ -15,7 +15,7 @@ type GoogleCloudStorageSuite struct {
 }
 
 func (suite *GoogleCloudStorageSuite) SetupSuite() {
-	cf := config.MustRead("../../config/testing.json")
+	cf := config.MustRead("../../../config/testing.json")
 	suite.sp = service.New(cf)
 }
 

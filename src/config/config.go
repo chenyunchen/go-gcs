@@ -5,12 +5,17 @@ import (
 	"fmt"
 	"os"
 
-	"go-gcs/src/service/googlecloudstorageprovider"
+	"go-gcs/src/service/googlecloud"
 )
+
+type Storage struct {
+	BucketName string `json:"bucketName"`
+}
 
 // Config is the structure for server
 type Config struct {
-	GoogleCloudStorage *googlecloudstorageprovider.GoogleCloudStorageConfig `json:"googlecloudstorage"`
+	GoogleCloud *googlecloud.Config `json:"googlecloud"`
+	Storage     Storage             `json:"storage"`
 
 	// the version settings of the current application
 	Version string `json:"version"`

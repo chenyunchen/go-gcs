@@ -10,13 +10,11 @@ type SignedUrlRequest struct {
 
 // SinglePayload is the structure for single payload
 type SinglePayload struct {
-	From string `json:"from" validate:"required"`
-	To   string `json:"to" validate:"required"`
+	To string `json:"to" validate:"required"`
 }
 
 // GroupPayload is the structure for group payload
 type GroupPayload struct {
-	From    string `json:"from" validate:"required"`
 	GroupId string `json:"groupId" validate:"required"`
 }
 

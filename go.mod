@@ -8,6 +8,7 @@ require (
 	github.com/cosiner/argv v0.0.0-20181111161405-36fdb9e0bb2d // indirect
 	github.com/davidrjenni/reftools v0.0.0-20180914123528-654d0ba4f96d // indirect
 	github.com/derekparker/delve v1.1.0 // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/emicklei/go-restful v2.8.0+incompatible
 	github.com/fatih/gomodifytags v0.0.0-20180914191908-141225bf62b6 // indirect
 	github.com/fatih/motion v0.0.0-20180408211639-218875ebe238 // indirect
@@ -38,7 +39,7 @@ require (
 	golang.org/x/lint v0.0.0-20181026193005-c67002cb31c3 // indirect
 	golang.org/x/net v0.0.0-20181108082009-03003ca0c849 // indirect
 	golang.org/x/tools v0.0.0-20181113200934-7e59e591a261 // indirect
-	google.golang.org/api v0.0.0-20181108001712-cfbc873f6b93 // indirect
+	google.golang.org/api v0.0.0-20181108001712-cfbc873f6b93
 	google.golang.org/genproto v0.0.0-20181109154231-b5d43981345b // indirect
 	gopkg.in/alecthomas/kingpin.v3-unstable v3.0.0-20180810215634-df19058c872c // indirect
 	gopkg.in/go-playground/validator.v9 v9.23.0

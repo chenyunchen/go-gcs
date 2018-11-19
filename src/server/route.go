@@ -9,11 +9,11 @@ import (
 
 // AppRoute will add router
 func (a *App) AppRoute() *mux.Router {
-	router := mux.NewRouter()
-
 	container := restful.NewContainer()
+	container.Filter(globalLogging)
 	container.Add(newSignedUrlService(a.Service))
 
+	router := mux.NewRouter()
 	router.PathPrefix("/v1/").Handler(container)
 
 	return router
@@ -22,6 +22,7 @@ func (a *App) AppRoute() *mux.Router {
 func newSignedUrlService(sp *service.Container) *restful.WebService {
 	webService := new(restful.WebService)
 	webService.Path("/v1/signurl").Consumes(restful.MIME_JSON, restful.MIME_JSON).Produces(restful.MIME_JSON, restful.MIME_JSON)
+	webService.Filter(validateTokenMiddleware)
 	webService.Route(webService.POST("/").To(http.RESTfulServiceHandler(sp, createGCSSignedUrlHandler)))
 	return webService
 }
