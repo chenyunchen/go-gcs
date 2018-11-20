@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"go-gcs/src/service/googlecloud"
+	"go-gcs/src/service/googlecloud/pubsubprovider"
 )
 
 type Storage struct {
@@ -14,8 +15,11 @@ type Storage struct {
 
 // Config is the structure for server
 type Config struct {
-	GoogleCloud *googlecloud.Config `json:"googlecloud"`
-	Storage     Storage             `json:"storage"`
+	GoogleCloud *googlecloud.Config    `json:"googlecloud"`
+	Storage     *Storage               `json:"storage"`
+	PubSub      *pubsubprovider.PubSub `json:"pubsub"`
+
+	JWTSecretKey string `json:"jwtSecretKey"`
 
 	// the version settings of the current application
 	Version string `json:"version"`

@@ -17,7 +17,7 @@ type Container struct {
 // New will create container
 func New(cf config.Config) *Container {
 	log.Info("Reading google cloud pubsub config file.")
-	googlecloudpubsub := pubsubprovider.New(cf.GoogleCloud)
+	googlecloudpubsub := pubsubprovider.New(cf.GoogleCloud, cf.PubSub)
 
 	validate := validator.New()
 

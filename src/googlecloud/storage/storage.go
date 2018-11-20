@@ -31,6 +31,7 @@ func SignURL(sp *service.Container, path string, fileName string, contentType st
 	hashFileName := fmt.Sprintf("%s_%s", hex.EncodeToString(b), r.Replace(fileName))
 
 	su, err := storage.SignedURL(sp.Config.Storage.BucketName, path+hashFileName, &opts)
+	fmt.Println(su)
 	if err != nil {
 		return entity.SignedUrl{}, err
 	}
@@ -38,17 +39,17 @@ func SignURL(sp *service.Container, path string, fileName string, contentType st
 	if err != nil {
 		return entity.SignedUrl{}, err
 	}
-	querys, err := url.ParseQuery(u.RawQuery)
+	queries, err := url.ParseQuery(u.RawQuery)
 	if err != nil {
 		return entity.SignedUrl{}, err
 	}
 
 	return entity.SignedUrl{
-		Url: fmt.Sprintf("%s://%s%s", u.Scheme, u.Host, u.Path),
-		UploadQuerys: entity.UploadQuerys{
-			Expires:        querys["Expires"][0],
-			GoogleAccessId: querys["GoogleAccessId"][0],
-			Signature:      querys["Signature"][0],
+		Url: strings.Split(su, "?")[0],
+		UploadQueries: entity.UploadQueries{
+			Expires:        queries["Expires"][0],
+			GoogleAccessId: queries["GoogleAccessId"][0],
+			Signature:      queries["Signature"][0],
 		},
 	}, nil
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "context"
 	"flag"
 	"os"
 	"os/signal"
@@ -35,7 +36,12 @@ func main() {
 		sig := <-c
 		log.Info("caught signal: ", sig.String())
 
-		log.Info("stopping client service...")
+		// ctx := context.Background()
+
+		log.Info("deleting google cloud pubsub subscription...")
+		// subName := a.Config.PubSub.Subscription
+		// sub := a.Service.GoogleCloudPubSub.Client.Subscription(subName)
+		// sub.Delete(ctx)
 
 		log.Info("all service are stopped successfully")
 		close(stop)

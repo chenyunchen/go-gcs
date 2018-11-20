@@ -20,12 +20,12 @@ type GroupPayload struct {
 
 // SignedUrlRequest is the structure for signed url response
 type SignedUrl struct {
-	Url          string `json:"url" validate:"required"`
-	UploadQuerys `json:"uploadQuerys" validate:"required"`
+	Url           string `json:"url" validate:"required"`
+	UploadQueries `json:"uploadQueries" validate:"required"`
 }
 
 // GroupPayload is the structure for upload query:
-type UploadQuerys struct {
+type UploadQueries struct {
 	Expires        string `json:"Expires" validate:"required"`
 	GoogleAccessId string `json:"GoogleAccessId" validate:"required"`
 	Signature      string `json:"Signature" validate:"required"`
