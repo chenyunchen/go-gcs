@@ -2,3 +2,4 @@
 .vagrant
 /key.pem
 /file_manager
+/config

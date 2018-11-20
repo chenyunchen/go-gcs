@@ -18,15 +18,22 @@
 
 - name: Copy files to "{{ app_dest }}"
   synchronize:
-    src: "./"
+    src: "./common/"
     dest: "{{ app_dest }}"
     copy_links: yes
 
-- name: Create local.json
-  template: src=local.json.j2 dest="{{ config_dir }}/local.json"
+#- name: Create {{ env }}.json
+#  template: src=local.json.j2 dest="{{ config_dir }}/{{ env }}.json"
+#  when: env == 'local'
+
+- name: Copy files to "{{ app_dest }}" for "{{ env }}"
+  synchronize:
+    src: "./{{ env }}/"
+    dest: "{{ config_dir }}"
+    copy_links: yes
 
 - name: Start {{ app_exe }}
   become: True
-  shell: nohup ./{{ app_exe }} -port=443  1>/dev/null 2>&1 &
+  shell: nohup ./{{ app_exe }} -config config/{{ env }}.json -port=443  1>/dev/null 2>&1 &
   args:
     chdir: "{{ app_dest }}"

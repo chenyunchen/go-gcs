@@ -1,6 +1,1 @@
-
-jfm_gcs_project_id: "jkopay-5566"
-jfm_gcs_bucket_name: "jkopay-test"
-jfm_gcs_google_acces_id: "jkopay@jkopay-5566.iam.gserviceaccount.com"
-jfm_gcs_service_account_pem: "key.pem"
-jfm_version: "local"
+env: develop

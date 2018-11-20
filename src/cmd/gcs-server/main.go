@@ -36,6 +36,7 @@ func main() {
 		sig := <-c
 		log.Info("caught signal: ", sig.String())
 
+
 		// ctx := context.Background()
 
 		log.Info("deleting google cloud pubsub subscription...")
