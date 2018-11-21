@@ -22,18 +22,19 @@
     dest: "{{ app_dest }}"
     copy_links: yes
 
-#- name: Create {{ env }}.json
-#  template: src=local.json.j2 dest="{{ config_dir }}/{{ env }}.json"
-#  when: env == 'local'
-
 - name: Copy files to "{{ app_dest }}" for "{{ env }}"
   synchronize:
     src: "./{{ env }}/"
     dest: "{{ config_dir }}"
     copy_links: yes
 
-- name: Start {{ app_exe }}
+- name: Create file_manager.service
   become: True
-  shell: nohup ./{{ app_exe }} -config config/{{ env }}.json -port=443  1>/dev/null 2>&1 &
-  args:
-    chdir: "{{ app_dest }}"
+  template: src=file_manager.service.j2 dest="/etc/systemd/system/file_manager.service"
+
+- name: Start file_manager.service
+  become: True
+  systemd:
+    state: started
+    name: file_manager.service
+  register: start_file_manager_server_res

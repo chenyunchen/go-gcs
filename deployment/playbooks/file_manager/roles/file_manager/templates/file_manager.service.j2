@@ -1,0 +1,12 @@
+[Unit]
+Description=file manager service
+
+[Service]
+Type=simple
+WorkingDirectory={{ app_dest }}
+ExecStart={{ app_dest }}/{{ app_exe }} -config config/{{ env }}.json -port={{ app_port }}  1>/dev/null 2>&1 &
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

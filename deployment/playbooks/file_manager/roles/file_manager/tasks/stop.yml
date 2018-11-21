@@ -1,3 +1,5 @@
-- name: Stop {{ app_exe }}
+- name: Stop file_manager.service
   become: True
-  shell: ps -ef | grep {{ app_exe }} | grep -v grep | awk '{print $2}' | xargs -r kill -9
+  systemd:
+    state: stopped
+    name: file_manager.service

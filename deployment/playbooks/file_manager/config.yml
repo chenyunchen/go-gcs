@@ -1,0 +1,8 @@
+---
+
+- hosts: file_manager_host
+  tasks:
+  - name: Generate {{ app_name }} configs
+    import_role:
+      name: file_manager
+      tasks_from: config.yml

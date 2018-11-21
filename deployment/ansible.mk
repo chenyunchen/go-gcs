@@ -8,6 +8,9 @@ common-stop:
 common-check:
 	ansible-playbook -i ../../environments/$(ENV) check.yml
 
+common-config:
+	ansible-playbook -i ../../environments/$(ENV) config.yml
+
 common-ping:
 	ansible -i ../../environments/$(ENV) all -m ping
 
