@@ -1,14 +1,14 @@
 package main
 
 import (
-	_ "context"
+	"context"
 	"flag"
 	"os"
 	"os/signal"
-	"syscall"
 
 	"go-gcs/src/logger"
 	"go-gcs/src/server"
+	"syscall"
 )
 
 func main() {
