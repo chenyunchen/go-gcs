@@ -1,3 +1,6 @@
+# keys
+/key.pem
+
 # log
 **/*.log
 **/logs
