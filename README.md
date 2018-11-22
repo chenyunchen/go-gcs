@@ -29,27 +29,27 @@ go test ./src/...
 go run src/cmd/gcs-server/main.go
 ```
 
-<a name="header_2"></a>
 ## Overview
+<a name="header_2"></a>
 
 <!---
 ```
 msc {
   wordwraparcs=true;
-  
+
   auth [linecolor=green, arclinecolor=green, label="Auth"],
   file [linecolor=grey, arclinecolor=grey, label="File"],
   app [linecolor=red, arclinecolor=red, label="App"],
   gcs [linecolor=blue, arclinecolor=blue, label="GCS"];
-  
+
   app => auth [label="GetFileServerURLandJWTToken()"];
-  auth => app [label="{\"url\":\"fileserver.jello.com.tw\", 
+  auth => app [label="{\"url\":\"fileserver.jello.com.tw\",
   \"jwt\":<jwt_token>}"];
-  
+
   app => file [label="POST fileserver.jello.com.tw with info"];
   file => app [label="{\"url\":<upload_url>}"];
   app => gcs [label="PUT <url>"];
-  gcs => app [label="GET <url>"]; 
+  gcs => app [label="GET <url>"];
 }
 ```
 
@@ -93,7 +93,7 @@ Example:
 
 * image/jpeg
 * image/png
-* video/mp4 
+* video/mp4
 
 ```json
 {
@@ -157,7 +157,7 @@ Example:
 
 ```json
 {
-    "baseUrl": "https://storage.googleapis.com/jkopay-test/Group/groupawesomeId/myawesomeId/3f2d6655_abc-123.txt",
+    "url": "https://storage.googleapis.com/jkopay-test/Group/groupawesomeId/myawesomeId/3f2d6655_abc-123.txt",
     "uploadHeaders": {
         "Content-Type": "text/plain",
         "x-goog-content-length-range": "0,200000000"
