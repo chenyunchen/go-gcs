@@ -29,8 +29,33 @@ go test ./src/...
 go run src/cmd/gcs-server/main.go
 ```
 
+<a name="header_2"></a>
 ## Overview
 <a name="header_2"></a>
+
+<!---
+```
+msc {
+  wordwraparcs=true;
+
+  auth [linecolor=green, arclinecolor=green, label="Auth"],
+  file [linecolor=grey, arclinecolor=grey, label="File"],
+  app [linecolor=red, arclinecolor=red, label="App"],
+  gcs [linecolor=blue, arclinecolor=blue, label="GCS"];
+
+  app => auth [label="GetFileServerURLandJWTToken()"];
+  auth => app [label="{\"url\":\"fileserver.jello.com.tw\",
+  \"jwt\":<jwt_token>}"];
+
+  app => file [label="POST fileserver.jello.com.tw with info"];
+  file => app [label="{\"url\":<upload_url>}"];
+  app => gcs [label="PUT <url>"];
+  gcs => app [label="GET <url>"];
+}
+```
+
+[mscgenjs](https://mscgen.js.org/)
+-->
 
 <!---
 ```
@@ -222,6 +247,7 @@ Example:
 	"contentType": "image/jpeg"
 }
 ```
+Example:
 
 <a name="header_3_2_2"></a>
 #### Response
@@ -234,6 +260,18 @@ Example:
    "640": <640(string)>,
    "1080": <1080(string)>,
 	"origin": <origin<string>>
+}
+```
+Example:
+
+```json
+{
+    "100": "https://storage.googleapis.com/jkopay-test_img_resize/test/cat.jpg_100",
+    "150": "https://storage.googleapis.com/jkopay-test_img_resize/test/cat.jpg_150",
+    "300": "https://storage.googleapis.com/jkopay-test_img_resize/test/cat.jpg_300",
+    "640": "https://storage.googleapis.com/jkopay-test_img_resize/test/cat.jpg_640",
+    "1080": "https://storage.googleapis.com/jkopay-test_img_resize/test/cat.jpg_1080",
+    "origin": "https://storage.googleapis.com/jkopay-test_img_resize/test/cat.jpg"
 }
 ```
 Example:
