@@ -11,7 +11,7 @@ import (
 func (a *App) AppRoute() *mux.Router {
 	container := restful.NewContainer()
 	container.Filter(globalLogging)
-	container.Add(newSignedUrlService(a.Service))
+	container.Add(newStorageService(a.Service))
 
 	router := mux.NewRouter()
 	router.PathPrefix("/v1/").Handler(container)
@@ -19,10 +19,10 @@ func (a *App) AppRoute() *mux.Router {
 	return router
 }
 
-func newSignedUrlService(sp *service.Container) *restful.WebService {
+func newStorageService(sp *service.Container) *restful.WebService {
 	webService := new(restful.WebService)
-	webService.Path("/v1/signurl").Consumes(restful.MIME_JSON, restful.MIME_JSON).Produces(restful.MIME_JSON, restful.MIME_JSON)
-	webService.Filter(validateTokenMiddleware(sp.Config.JWTSecretKey))
-	webService.Route(webService.POST("/").To(http.RESTfulServiceHandler(sp, createGCSSignedUrlHandler)))
+	webService.Path("/v1/storage").Consumes(restful.MIME_JSON, restful.MIME_JSON).Produces(restful.MIME_JSON, restful.MIME_JSON)
+	webService.Route(webService.POST("/signurl").Filter(validateTokenMiddleware(sp.Config.JWTSecretKey)).To(http.RESTfulServiceHandler(sp, createGCSSignedUrlHandler)))
+	webService.Route(webService.POST("/resize/image").To(http.RESTfulServiceHandler(sp, resizeGCSImageHandler)))
 	return webService
 }

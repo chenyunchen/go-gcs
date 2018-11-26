@@ -6,12 +6,12 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
 	"github.com/emicklei/go-restful"
-	log "github.com/sirupsen/logrus"
+	"go-gcs/src/logger"
 	response "go-gcs/src/net/http"
 )
 
 func globalLogging(req *restful.Request, resp *restful.Response, chain *restful.FilterChain) {
-	log.Info(req.Request.Method, ", ", req.Request.URL)
+	logger.Infof("%s %s", req.Request.Method, req.Request.URL)
 	chain.ProcessFilter(req, resp)
 }
 
@@ -36,7 +36,7 @@ func validateTokenMiddleware(jwtSecretKey string) func(req *restful.Request, res
 				return
 			}
 		} else {
-			log.Info("Unauthorized access to this resource")
+			logger.Infof("Unauthorized access to this resource")
 			resp.WriteHeaderAndEntity(http.StatusUnauthorized,
 				response.ActionResponse{
 					Error:   true,

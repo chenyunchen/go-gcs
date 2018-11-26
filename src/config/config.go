@@ -5,21 +5,19 @@ import (
 	"fmt"
 	"os"
 
+	"go-gcs/src/logger"
 	"go-gcs/src/service/googlecloud"
 	"go-gcs/src/service/googlecloud/pubsubprovider"
+	"go-gcs/src/service/googlecloud/storageprovider"
 )
-
-type Storage struct {
-	BucketName string `json:"bucketName"`
-}
 
 // Config is the structure for server
 type Config struct {
-	GoogleCloud *googlecloud.Config    `json:"googlecloud"`
-	Storage     *Storage               `json:"storage"`
-	PubSub      *pubsubprovider.PubSub `json:"pubsub"`
-
-	JWTSecretKey string `json:"jwtSecretKey"`
+	GoogleCloud  *googlecloud.Config      `json:"googlecloud"`
+	Storage      *storageprovider.Storage `json:"storage"`
+	PubSub       *pubsubprovider.PubSub   `json:"pubsub"`
+	JWTSecretKey string                   `json:"jwtSecretKey"`
+	Logger       logger.LoggerConfig      `json:"logger"`
 
 	// the version settings of the current application
 	Version string `json:"version"`

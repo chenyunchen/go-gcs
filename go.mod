@@ -22,17 +22,25 @@ require (
 	github.com/kisielk/errcheck v1.1.0 // indirect
 	github.com/klauspost/asmfmt v0.0.0-20171230121622-022c51c61cbd // indirect
 	github.com/koron/iferr v0.0.0-20180615142939-bb332a3b1d91 // indirect
+	github.com/lestrrat/go-file-rotatelogs v0.0.0-20180223000712-d3151e2a480f
+	github.com/lestrrat/go-strftime v0.0.0-20180220042222-ba3bf9c1d042 // indirect
+	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/mdempsky/gocode v0.0.0-20181108163241-68f5472551ba // indirect
+	github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b // indirect
+	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/nicksnyder/go-i18n v1.10.0 // indirect
 	github.com/pelletier/go-toml v1.2.0 // indirect
 	github.com/peterh/liner v1.1.0 // indirect
+	github.com/pkg/errors v0.8.0 // indirect
+	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/rogpeppe/godef v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.2.0
 	github.com/spf13/cobra v0.0.3 // indirect
 	github.com/spf13/pflag v1.0.3 // indirect
 	github.com/stamblerre/gocode v0.0.0-20181113192652-2c62dd5df32d // indirect
 	github.com/stretchr/testify v1.2.2
+	github.com/x-cray/logrus-prefixed-formatter v0.5.2
 	github.com/zmb3/gogetdoc v0.0.0-20181026013253-9098cf5fc236 // indirect
 	go.opencensus.io v0.18.0 // indirect
 	golang.org/x/arch v0.0.0-20180920145803-b19384d3c130 // indirect

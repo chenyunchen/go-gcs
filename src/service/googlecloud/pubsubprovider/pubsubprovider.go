@@ -3,13 +3,13 @@ package pubsubprovider
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"sync"
 	"time"
 
 	"cloud.google.com/go/pubsub"
-	log "github.com/sirupsen/logrus"
+	"go-gcs/src/logger"
 	"go-gcs/src/service/googlecloud"
+	"go-gcs/src/service/googlecloud/storageprovider"
 	"google.golang.org/api/option"
 )
 
@@ -21,50 +21,66 @@ type PubSub struct {
 
 // Service is the structure for service
 type Service struct {
-	Client *pubsub.Client
+	Config  *PubSub
+	Client  *pubsub.Client
+	Context context.Context
 }
 
-// Notify will call if google cloud storage object update
-func Notify(ctx context.Context, client *pubsub.Client, topic string, subscription string) {
-	sub, err := client.CreateSubscription(ctx, subscription, pubsub.SubscriptionConfig{
-		Topic:       client.Topic(topic),
+type GoogleCloudStorageNotification struct {
+	Name        string `json:"name" validate:"required"`
+	Bucket      string `json:"bucket" validate:"required"`
+	ContentType string `json:"contentType" validate:"required"`
+}
+
+// NotifyFromGCSStorage will call if google cloud storage object update
+func (s *Service) NotifyFromGCSStorage(sp *storageprovider.Service) {
+	sub, err := s.Client.CreateSubscription(s.Context, s.Config.Subscription, pubsub.SubscriptionConfig{
+		Topic:       s.Client.Topic(s.Config.Topic),
 		AckDeadline: 20 * time.Second,
 	})
 	if err != nil {
-		log.Warn("error while create google cloud pubsub subscription: ", err)
+		logger.Warnf("error while create google cloud pubsub subscription: %s", err)
 	}
 
 	var mu sync.Mutex
-	cctx, cancel := context.WithCancel(ctx)
+	cctx, cancel := context.WithCancel(s.Context)
 	err = sub.Receive(cctx, func(ctx context.Context, msg *pubsub.Message) {
 		msg.Ack()
-		fmt.Println(msg.Attributes["eventType"])
-		fmt.Printf("Got message: %q\n", string(msg.Data))
+		if msg.Attributes["eventType"] == "OBJECT_FINALIZE" {
+			gcsNotification := GoogleCloudStorageNotification{}
+			json.Unmarshal(msg.Data, &gcsNotification)
+
+			if gcsNotification.ContentType == "image/jpg" ||
+				gcsNotification.ContentType == "image/jpeg" ||
+				gcsNotification.ContentType == "jpeg" ||
+				gcsNotification.ContentType == "image/png" {
+				go sp.ResizeMultiImageSizeAndUpload(gcsNotification.ContentType, gcsNotification.Bucket, gcsNotification.Name)
+			}
+		}
 		mu.Lock()
 		defer mu.Unlock()
 	})
 	if err != nil {
-		log.Warn("error while create google cloud pubsub notify: ", err)
+		logger.Warnf("error while create google cloud pubsub notify: %s", err)
 		cancel()
 	}
 }
 
 // New will reture a new service
-func New(googleCloudConfig *googlecloud.Config, pubsubConfig *PubSub) *Service {
+func New(ctx context.Context, googleCloudConfig *googlecloud.Config, pubsubConfig *PubSub) *Service {
 	plan, err := json.Marshal(googleCloudConfig)
 	if err != nil {
-		log.Warn("error while read config file: ", err)
+		logger.Warnf("error while read config file: %s", err)
 	}
 
-	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, googleCloudConfig.ProjectId, option.WithCredentialsJSON(plan))
 	if err != nil {
-		log.Warn("error while create google cloud pubsub client: ", err)
+		logger.Warnf("error while create google cloud pubsub client: %s", err)
 	}
 
-	// go Notify(ctx, client, pubsubConfig.Topic, pubsubConfig.Subscription)
-
 	return &Service{
-		Client: client,
+		Config:  pubsubConfig,
+		Client:  client,
+		Context: ctx,
 	}
 }

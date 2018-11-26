@@ -3,6 +3,7 @@ package storage
 import (
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"math/rand"
 	"net/url"
@@ -15,13 +16,14 @@ import (
 )
 
 // SignURL will sign url to google cloud storage
-func SignURL(sp *service.Container, path string, fileName string, contentType string, method string, expires time.Time) (entity.SignedUrl, error) {
+func SignURL(sp *service.Container, path string, fileName string, contentType string, method string, expires time.Time) (su entity.SignedUrl, err error) {
 	opts := storage.SignedURLOptions{
 		GoogleAccessID: sp.Config.GoogleCloud.ClientEmail,
 		PrivateKey:     []byte(sp.Config.GoogleCloud.PrivateKey),
 		Method:         method,
 		Expires:        expires,
 		ContentType:    contentType,
+		Headers:        []string{"x-goog-content-length-range:" + sp.GoogleCloudStorage.Config.ContentLengthRange},
 	}
 
 	rand.Seed(time.Now().UnixNano())
@@ -30,22 +32,23 @@ func SignURL(sp *service.Container, path string, fileName string, contentType st
 	rand.Read(b)
 	hashFileName := fmt.Sprintf("%s_%s", hex.EncodeToString(b), r.Replace(fileName))
 
-	su, err := storage.SignedURL(sp.Config.Storage.BucketName, path+hashFileName, &opts)
-	fmt.Println(su)
+	s, err := storage.SignedURL(sp.Config.Storage.Bucket, path+hashFileName, &opts)
 	if err != nil {
-		return entity.SignedUrl{}, err
+		return su, err
 	}
-	u, err := url.Parse(su)
+
+	u := strings.Split(s, "?")
+	queries, err := url.ParseQuery(u[1])
 	if err != nil {
-		return entity.SignedUrl{}, err
-	}
-	queries, err := url.ParseQuery(u.RawQuery)
-	if err != nil {
-		return entity.SignedUrl{}, err
+		return su, err
 	}
 
 	return entity.SignedUrl{
-		Url: strings.Split(su, "?")[0],
+		Url: u[0],
+		UploadHeaders: entity.UploadHeaders{
+			ContentType:        contentType,
+			ContentLengthRange: sp.GoogleCloudStorage.Config.ContentLengthRange,
+		},
 		UploadQueries: entity.UploadQueries{
 			Expires:        queries["Expires"][0],
 			GoogleAccessId: queries["GoogleAccessId"][0],
@@ -54,8 +57,23 @@ func SignURL(sp *service.Container, path string, fileName string, contentType st
 	}, nil
 }
 
+// CreateGCSSingleSignedUrl will sign single url by google cloud storage
+func CreateGCSSingleSignedUrl(sp *service.Container, userId, fileName, contentType, payload string) (su entity.SignedUrl, err error) {
+	method := "PUT"
+	expires := time.Now().Add(time.Second * 60)
+	singlePayload := entity.SinglePayload{}
+	json.Unmarshal([]byte(payload), &singlePayload)
+	if err := sp.Validator.Struct(singlePayload); err != nil {
+		return su, err
+	}
+
+	path := fmt.Sprintf("Single/%s/%s/", userId, singlePayload.To)
+
+	return SignURL(sp, path, fileName, contentType, method, expires)
+}
+
 // CreateGCSGroupSignedUrl will sign group url by google cloud storage
-func CreateGCSGroupSignedUrl(sp *service.Container, userId string, fileName string, contentType string, payload string) (entity.SignedUrl, error) {
+func CreateGCSGroupSignedUrl(sp *service.Container, userId, fileName, contentType, payload string) (entity.SignedUrl, error) {
 	method := "PUT"
 	expires := time.Now().Add(time.Second * 60)
 
@@ -70,18 +88,25 @@ func CreateGCSGroupSignedUrl(sp *service.Container, userId string, fileName stri
 	return SignURL(sp, path, fileName, contentType, method, expires)
 }
 
-// CreateGCSSingleSignedUrl will sign single url by google cloud storage
-func CreateGCSSingleSignedUrl(sp *service.Container, userId string, fileName string, contentType string, payload string) (entity.SignedUrl, error) {
-	method := "PUT"
-	expires := time.Now().Add(time.Second * 60)
+// ResizeGCSImage will resize image from google cloud storage
+func ResizeGCSImage(sp *service.Container, url, contentType string) (ri entity.ResizeImage, err error) {
+	if contentType == "image/jpg" || contentType == "image/jpeg" || contentType == "jpeg" || contentType == "image/png" {
+		u := strings.Split(url, "/")
+		path := strings.Join(u[4:], "/")
+		url, err = sp.GoogleCloudStorage.ResizeMultiImageSizeAndUpload(contentType, sp.GoogleCloudStorage.Config.Bucket, path)
+		if err != nil {
+			return ri, err
+		}
 
-	singlePayload := entity.SinglePayload{}
-	json.Unmarshal([]byte(payload), &singlePayload)
-	if err := sp.Validator.Struct(singlePayload); err != nil {
-		return entity.SignedUrl{}, err
+		return entity.ResizeImage{
+			Origin:         url,
+			ThumbWidth100:  url + "_100",
+			ThumbWidth150:  url + "_150",
+			ThumbWidth300:  url + "_300",
+			ThumbWidth640:  url + "_640",
+			ThumbWidth1080: url + "_1080",
+		}, nil
 	}
 
-	path := fmt.Sprintf("Single/%s/%s/", userId, singlePayload.To)
-
-	return SignURL(sp, path, fileName, contentType, method, expires)
+	return ri, errors.New("invalid content type.")
 }

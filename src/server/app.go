@@ -4,8 +4,8 @@ import (
 	"net"
 	"net/http"
 
-	log "github.com/sirupsen/logrus"
 	"go-gcs/src/config"
+	"go-gcs/src/logger"
 	"go-gcs/src/service"
 )
 
@@ -18,7 +18,7 @@ type App struct {
 // LoadConfig consumes a string of path to the json config file and read config file into Config.
 func (a *App) LoadConfig(configPath string) *App {
 	if configPath == "" {
-		log.Fatal("-config option is required.")
+		logger.Fatalf("-config option is required.")
 	}
 
 	a.Config = config.MustRead(configPath)
@@ -38,4 +38,8 @@ func (a *App) Start(host, port string) error {
 // InitilizeService weavering services with global variables inside server package
 func (a *App) InitilizeService() {
 	a.Service = service.New(a.Config)
+
+	// TODO check requirement if we need this
+	// logger.Infof("initializing google cloud pubsub subscription...")
+	// go a.Service.GoogleCloudPubSub.NotifyFromGCSStorage(a.Service.GoogleCloudStorage)
 }

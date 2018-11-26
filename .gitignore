@@ -1,5 +1,13 @@
+# log
+**/*.log
+**/logs
+
+# vagrant
+vagrant/credentials
+.vagrant/
+**/*.vmdk
+**/*.creds
+
 .idea
-.vagrant
-/key.pem
 /file_manager
 /config

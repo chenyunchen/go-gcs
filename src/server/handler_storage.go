@@ -42,3 +42,24 @@ func createGCSSignedUrlHandler(ctx *context.Context) {
 	}
 	resp.WriteEntity(signedUrl)
 }
+
+func resizeGCSImageHandler(ctx *context.Context) {
+	sp, req, resp := ctx.ServiceProvider, ctx.Request, ctx.Response
+
+	r := entity.ResizeImageRequest{}
+	if err := req.ReadEntity(&r); err != nil {
+		response.BadRequest(req.Request, resp.ResponseWriter, err)
+		return
+	}
+	if err := sp.Validator.Struct(r); err != nil {
+		response.BadRequest(req.Request, resp.ResponseWriter, err)
+		return
+	}
+
+	resizeImage, err := storage.ResizeGCSImage(sp, r.Url, r.ContentType)
+	if err != nil {
+		response.BadRequest(req.Request, resp.ResponseWriter, err)
+		return
+	}
+	resp.WriteEntity(resizeImage)
+}

@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	log "github.com/sirupsen/logrus"
+	"go-gcs/src/logger"
 	"go-gcs/src/server"
 )
 
@@ -34,17 +34,16 @@ func main() {
 	signal.Notify(sigc, os.Interrupt, syscall.SIGTERM)
 	go func(c chan os.Signal) {
 		sig := <-c
-		log.Info("caught signal: ", sig.String())
+		logger.Infof("caught signal: %s", sig.String())
 
-
+		// TODO check requirement if we need this
+		// logger.Infof("deleting google cloud pubsub subscription...")
 		// ctx := context.Background()
-
-		log.Info("deleting google cloud pubsub subscription...")
 		// subName := a.Config.PubSub.Subscription
 		// sub := a.Service.GoogleCloudPubSub.Client.Subscription(subName)
 		// sub.Delete(ctx)
 
-		log.Info("all service are stopped successfully")
+		logger.Infof("all service are stopped successfully")
 		close(stop)
 	}(sigc)
 
