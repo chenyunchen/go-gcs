@@ -1,7 +1,7 @@
 package main
 
 import (
-	"context"
+	_ "context"
 	"flag"
 	"os"
 	"os/signal"

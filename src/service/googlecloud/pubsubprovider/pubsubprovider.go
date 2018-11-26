@@ -13,8 +13,6 @@ import (
 	"google.golang.org/api/option"
 )
 
-const GoogleCloudStoragePublicBaseUrl = "https://storage.googleapis.com"
-
 // PubSub is the structure for config
 type PubSub struct {
 	Topic        string `json:"topic"`
