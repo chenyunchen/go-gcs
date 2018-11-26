@@ -1,6 +1,7 @@
 package imageresize
 
 import (
+	"bufio"
 	"errors"
 	"image"
 	"image/jpeg"
@@ -29,6 +30,26 @@ func DownloadImageFromUrl(url, contentType string) (image.Image, error) {
 		return jpeg.Decode(resp.Body)
 	case "image/png":
 		return png.Decode(resp.Body)
+	}
+	return nil, errors.New("invalid content type.")
+}
+
+func ReadImageFile(contentType, path string) (image.Image, error) {
+	imgFp, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer imgFp.Close()
+
+	switch contentType {
+	case "image/jpg":
+		return jpeg.Decode(bufio.NewReader(imgFp))
+	case "image/jpeg":
+		return jpeg.Decode(bufio.NewReader(imgFp))
+	case "jpeg":
+		return jpeg.Decode(bufio.NewReader(imgFp))
+	case "image/png":
+		return png.Decode(bufio.NewReader(imgFp))
 	}
 	return nil, errors.New("invalid content type.")
 }
