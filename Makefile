@@ -10,3 +10,6 @@ build-linux:
 
 run:
 	go run src/cmd/gcs-server/main.go
+
+zip:
+	zip -r config.zip ./config/
