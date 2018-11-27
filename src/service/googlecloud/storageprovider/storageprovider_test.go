@@ -42,18 +42,15 @@ func TestStorageProviderSuite(t *testing.T) {
 	suite.Run(t, new(GoogleCloudStorageProviderSuite))
 }
 
-func (suite *GoogleCloudStorageProviderSuite) TestUploadDelete() {
+func (suite *GoogleCloudStorageProviderSuite) TestUpload() {
 	bucket := suite.service.Config.Bucket
 	path := "test/cat.jpg"
 	filePath := "../../../../test/image/cat.jpg"
 	err := suite.service.Upload(bucket, path, filePath)
 	suite.NoError(err)
-
-	err = suite.service.Delete(bucket, path)
-	suite.NoError(err)
 }
 
-func (suite *GoogleCloudStorageProviderSuite) TestUploadImageDelete() {
+func (suite *GoogleCloudStorageProviderSuite) TestUploadImage() {
 	contentType := "image/jpeg"
 	filePath := "../../../../test/image/cat.jpg"
 	img, err := imageresize.ReadImageFile(contentType, filePath)
@@ -64,12 +61,9 @@ func (suite *GoogleCloudStorageProviderSuite) TestUploadImageDelete() {
 	path := "test/cat.jpg"
 	err = suite.service.UploadImage(img, contentType, bucket, path)
 	suite.NoError(err)
-
-	err = suite.service.Delete(bucket, path)
-	suite.NoError(err)
 }
 
-func (suite *GoogleCloudStorageProviderSuite) TestResizeImageAndUploadDelete() {
+func (suite *GoogleCloudStorageProviderSuite) TestResizeImageAndUpload() {
 	contentType := "image/jpeg"
 	filePath := "../../../../test/image/cat.jpg"
 	img, err := imageresize.ReadImageFile(contentType, filePath)
@@ -78,10 +72,6 @@ func (suite *GoogleCloudStorageProviderSuite) TestResizeImageAndUploadDelete() {
 
 	path := "test/cat.jpg"
 	err = suite.service.ResizeImageAndUpload(img, 100, contentType, path)
-	suite.NoError(err)
-
-	bucket := suite.service.Config.ImageResizeBucket
-	err = suite.service.Delete(bucket, path+"_100")
 	suite.NoError(err)
 }
 
@@ -95,21 +85,5 @@ func (suite *GoogleCloudStorageProviderSuite) TestResizeMultiImageSizeAndUpload(
 	contentType := "image/jpeg"
 	url, err := suite.service.ResizeMultiImageSizeAndUpload(contentType, bucket, path)
 	suite.NoError(err)
-	suite.NotEqual("", url)
-
-	imageResizeBucket := suite.service.Config.ImageResizeBucket
-	err = suite.service.Delete(bucket, path)
-	suite.NoError(err)
-	err = suite.service.Delete(imageResizeBucket, path)
-	suite.NoError(err)
-	err = suite.service.Delete(imageResizeBucket, path+"_100")
-	suite.NoError(err)
-	err = suite.service.Delete(imageResizeBucket, path+"_150")
-	suite.NoError(err)
-	err = suite.service.Delete(imageResizeBucket, path+"_300")
-	suite.NoError(err)
-	err = suite.service.Delete(imageResizeBucket, path+"_640")
-	suite.NoError(err)
-	err = suite.service.Delete(imageResizeBucket, path+"_1080")
-	suite.NoError(err)
+	suite.NotEmpty(url)
 }

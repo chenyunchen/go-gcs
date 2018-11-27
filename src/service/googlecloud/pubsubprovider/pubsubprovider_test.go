@@ -74,23 +74,4 @@ func (suite *GoogleCloudPubSubProviderSuite) TestNotifyFromGCSStorage() {
 	filePath := "../../../../test/image/cat.jpg"
 	err = storageService.Upload(bucket, path, filePath)
 	suite.NoError(err)
-
-	// Wait for resize image
-	time.Sleep(10 * time.Second)
-
-	imageResizeBucket := storageService.Config.ImageResizeBucket
-	err = storageService.Delete(bucket, path)
-	suite.NoError(err)
-	err = storageService.Delete(imageResizeBucket, path)
-	suite.NoError(err)
-	err = storageService.Delete(imageResizeBucket, path+"_100")
-	suite.NoError(err)
-	err = storageService.Delete(imageResizeBucket, path+"_150")
-	suite.NoError(err)
-	err = storageService.Delete(imageResizeBucket, path+"_300")
-	suite.NoError(err)
-	err = storageService.Delete(imageResizeBucket, path+"_640")
-	suite.NoError(err)
-	err = storageService.Delete(imageResizeBucket, path+"_1080")
-	suite.NoError(err)
 }
