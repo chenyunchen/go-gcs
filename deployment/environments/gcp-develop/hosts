@@ -1,0 +1,2 @@
+file_manager_host ansible_ssh_host=35.229.148.50 ansible_ssh_port=22 ansible_ssh_user=jello-backend ansible_ssh_private_key_file=~/.ssh/jello-backend-key
+

@@ -1,4 +1,3 @@
 app_name: file_manager
 app_dest: "{{ ansible_env.HOME }}/deploy/{{ app_name }}"
-app_port: 443
 app_exe: "{{ app_name }}"

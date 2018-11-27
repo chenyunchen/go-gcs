@@ -38,3 +38,8 @@
     state: started
     name: file_manager.service
   register: start_file_manager_server_res
+
+- name: Wait for {{ app_name }} to start
+  wait_for:
+    port: "{{ app_port }}"
+    timeout: 10
