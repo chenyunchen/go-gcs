@@ -2,6 +2,7 @@ package storage
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 	"time"
 
@@ -9,6 +10,7 @@ import (
 	"go-gcs/src/config"
 	"go-gcs/src/entity"
 	"go-gcs/src/service"
+	"go-gcs/src/service/googlecloud/storageprovider"
 )
 
 type GoogleCloudStorageSuite struct {
@@ -45,7 +47,7 @@ func (suite *GoogleCloudStorageSuite) TestCreateGCSSingleSignedUrl() {
 		To: "myAwesomeBuddyId",
 	}
 
-	p, err := json.Marshal(payload)
+	p, err := json.MarshalIndent(payload, "", "  ")
 	suite.NotNil(p)
 	suite.NoError(err)
 
@@ -62,7 +64,7 @@ func (suite *GoogleCloudStorageSuite) TestCreateGCSGroupSignedUrl() {
 		GroupId: "myAwesomeGroupId",
 	}
 
-	p, err := json.Marshal(payload)
+	p, err := json.MarshalIndent(payload, "", "  ")
 	suite.NotNil(p)
 	suite.NoError(err)
 
@@ -72,5 +74,15 @@ func (suite *GoogleCloudStorageSuite) TestCreateGCSGroupSignedUrl() {
 }
 
 func (suite *GoogleCloudStorageSuite) TestResizeGCSImage() {
+	bucket := suite.sp.GoogleCloudStorage.Config.Bucket
+	path := "test/cat.jpg"
+	filePath := "../../../test/image/cat.jpg"
+	err := suite.sp.GoogleCloudStorage.Upload(bucket, path, filePath)
+	suite.NoError(err)
 
+	url := fmt.Sprintf("%s/%s/%s", storageprovider.GoogleCloudStoragePublicBaseUrl, bucket, path)
+	contentType := "image/jpeg"
+	ri, err := ResizeGCSImage(suite.sp, url, contentType)
+	suite.NotNil(ri)
+	suite.NoError(err)
 }

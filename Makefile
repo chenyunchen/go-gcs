@@ -1,15 +1,44 @@
-EXE=file_manager
+## File name for executing
+FILE_NAME=file_manager
+## Folder content generated files
+BUILD_FOLDER = ./build
+## command
+GO           = go
+MKDIR_P      = mkdir -p
 
-all: build-linux
+################################################
 
+.PHONY: all
+all: build-linux test
+
+.PHONY: build-darwin
 build-darwin:
-	go build -o $(EXE) src/cmd/gcs-server/main.go
+	go build -o $(FILE_NAME) src/cmd/gcs-server/main.go
 
+.PHONY: build-linux
 build-linux:
-	export GOOS=linux && export GOARCH=amd64 &&	go build -o $(EXE) src/cmd/gcs-server/main.go
+	export GOOS=linux && export GOARCH=amd64 &&	go build -o $(FILE_NAME) src/cmd/gcs-server/main.go
 
+.PHONY: test
+test: build-linux
+	$(MAKE) src.test
+
+.PHONY: run
 run:
 	go run src/cmd/gcs-server/main.go
 
+.PHONY: zip
 zip:
 	zip -r config.zip ./config/
+
+## src/ ########################################
+
+.PHONY: src.test
+src.test:
+	$(GO) test -v ./src/...
+
+.PHONY: src.test-coverage
+src.test-coverage:
+	$(MKDIR_P) $(BUILD_FOLDER)/src/
+	$(GO) test -v -coverprofile=$(BUILD_FOLDER)/src/coverage.txt -covermode=atomic ./src/...
+	$(GO) tool cover -html=$(BUILD_FOLDER)/src/coverage.txt -o $(BUILD_FOLDER)/src/coverage.html
