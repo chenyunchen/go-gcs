@@ -3,11 +3,6 @@ FROM golang:1.11-alpine3.7
 
 WORKDIR /go-gcs
 
-
-
-
-
-
 RUN apk add --no-cache protobuf ca-certificates make git
 
 # Source code, building tools and dependences
