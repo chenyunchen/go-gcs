@@ -46,4 +46,5 @@ src.test-coverage:
 .PHONY: src.test-coverage-minikube
 src.test-coverage-minikube:
 	sed -i.bak "s/{{ projectId }}/$(PROJECTID)/g; s/{{ privateKeyId }}/$(PRIVATEKEYID)/g; s#{{ privateKey }}#$(PRIVATEKEY)#g; s/{{ clientEmail }}/$(CLIENTEMAIL)/g; s/{{ clientId }}/$(CLIENTID)/g; s#{{ clientCert }}#$(CLIENTCERT)#g; s/{{ jwtSecretKey }}/$(JWTSECRETKEY)/g;" config/testing.json
-	echo $(sed ':a;N;$!ba;s/\n/\\n/g' $PRIVATEKEY)
+	$(MAKE) src.test-coverage
+	mv config/testing.json.bak config/testing.json
