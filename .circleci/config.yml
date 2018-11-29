@@ -11,6 +11,3 @@ jobs:
       - checkout
       # specify any bash command here prefixed with `run: `
       - run: make src.test-coverage-minikube
-      - run: cat config/testing.json
-      - run: make src.test-coverage
-
