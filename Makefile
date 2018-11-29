@@ -9,15 +9,19 @@ MKDIR_P      = mkdir -p
 ################################################
 
 .PHONY: all
-all: build-linux test
+all: build build-linux test
+
+.PHONY: build
+build:
+	$(MAKE) src.build
 
 .PHONY: build-darwin
 build-darwin:
-	go build -o $(FILE_NAME) src/cmd/gcs-server/main.go
+	go build -o $(FILE_NAME) src/cmd/filemanger/main.go
 
 .PHONY: build-linux
 build-linux:
-	export GOOS=linux && export GOARCH=amd64 &&	go build -o $(FILE_NAME) src/cmd/gcs-server/main.go
+	export GOOS=linux && export GOARCH=amd64 &&	go build -o $(FILE_NAME) src/cmd/filemanager/main.go
 
 .PHONY: test
 test: build-linux
@@ -25,13 +29,19 @@ test: build-linux
 
 .PHONY: run
 run:
-	go run src/cmd/gcs-server/main.go
+	go run src/cmd/filemanager/main.go
 
 .PHONY: zip
 zip:
 	zip -r config.zip ./config/
 
 ## src/ ########################################
+
+.PHONY: src.build
+src.build:
+	$(GO) build -v ./src/...
+	$(MKDIR_P) $(BUILD_FOLDER)/src/cmd/filemanager/
+	$(GO) build -v -o $(BUILD_FOLDER)/src/cmd/filemanager/filemanager ./src/cmd/filemanager/...
 
 .PHONY: src.test
 src.test:
