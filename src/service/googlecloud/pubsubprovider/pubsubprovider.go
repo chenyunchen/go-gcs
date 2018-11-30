@@ -26,6 +26,7 @@ type Service struct {
 	Context context.Context
 }
 
+// GoogleCloudStorageNotification is the structure for notification
 type GoogleCloudStorageNotification struct {
 	Name        string `json:"name" validate:"required"`
 	Bucket      string `json:"bucket" validate:"required"`
