@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filemanager-server
+  namespace: filemanager
+  labels:
+    app: filemanager-server
+spec:
+  replicas: {{ .Values.controller.replicaCount }}
+  selector:
+    matchLabels:
+      app: filemanager-server
+  template:
+    metadata:
+      labels:
+        app: filemanager-server
+    spec:
+      serviceAccountName: filemanager-admin
+      containers:
+      - name: filemanager-server
+        image: yunchen/go-gcs:{{ .Values.controller.apiserverImageTag }}
+        ports:
+        - containerPort: 7890
+        volumeMounts:
+        - name: config-volume
+          mountPath: /go-gcs/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: filemanager-config
