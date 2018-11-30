@@ -13,6 +13,7 @@ import (
 	"github.com/nfnt/resize"
 )
 
+// DownloadImageFromUrl will download image from url
 func DownloadImageFromUrl(url, contentType string) (image.Image, error) {
 	// Fetch an image.
 	resp, err := http.Get(url)
@@ -31,9 +32,10 @@ func DownloadImageFromUrl(url, contentType string) (image.Image, error) {
 	case "image/png":
 		return png.Decode(resp.Body)
 	}
-	return nil, errors.New("invalid content type.")
+	return nil, errors.New("invalid content type")
 }
 
+// ReadImageFile will read image struct from file path
 func ReadImageFile(contentType, path string) (image.Image, error) {
 	imgFp, err := os.Open(path)
 	if err != nil {
@@ -51,9 +53,10 @@ func ReadImageFile(contentType, path string) (image.Image, error) {
 	case "image/png":
 		return png.Decode(bufio.NewReader(imgFp))
 	}
-	return nil, errors.New("invalid content type.")
+	return nil, errors.New("invalid content type")
 }
 
+// WriteImageFile will write image struct to file path
 func WriteImageFile(image image.Image, contentType, path string) error {
 	os.MkdirAll(filepath.Dir(path), os.ModePerm)
 	switch contentType {
@@ -66,9 +69,10 @@ func WriteImageFile(image image.Image, contentType, path string) error {
 	case "image/png":
 		return WritePngImageFile(image, path)
 	}
-	return errors.New("invalid content type.")
+	return errors.New("invalid content type")
 }
 
+// WritePngImageFile will write image struct to png file path
 func WritePngImageFile(image image.Image, path string) error {
 	imgFp, err := os.Create(path)
 	if err != nil {
@@ -83,6 +87,7 @@ func WritePngImageFile(image image.Image, path string) error {
 	return nil
 }
 
+// WriteJpegImageFile will write image struct to jpeg file path
 func WriteJpegImageFile(image image.Image, path string, quality int) error {
 	imgFp, err := os.Create(path)
 	if err != nil {
@@ -97,16 +102,18 @@ func WriteJpegImageFile(image image.Image, path string, quality int) error {
 	return nil
 }
 
+// ResizeImage will resize image struct and return image struct
 func ResizeImage(image image.Image, width, height uint) image.Image {
 	return resize.Resize(width, height, image, resize.Lanczos3)
 }
 
-// Thumbnail will fail if width or height == 0
+// ThumbnailImage will fail if width or height == 0
 // If maxWidth and maxHeight > image size, return the image with its original size
 func ThumbnailImage(image image.Image, maxWidth, maxHeight uint) image.Image {
 	return resize.Thumbnail(maxWidth, maxHeight, image, resize.Lanczos3)
 }
 
+// DeleteImage will delete image from path
 func DeleteImage(path string) error {
 	return os.Remove(path)
 }
