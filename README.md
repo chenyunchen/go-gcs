@@ -1,5 +1,10 @@
 # go-gcs
 
+[![CircleCI](https://circleci.com/gh/chenyunchen/go-gcs/tree/github%2Fdevelop.svg?style=svg)](https://circleci.com/gh/chenyunchen/go-gcs/tree/github%2Fdevelop)
+[![Go Report Card](https://goreportcard.com/badge/github.com/chenyunchen/go-gcs)](https://goreportcard.com/report/github.com/chenyunchen/go-gcs)
+[![codecov](https://codecov.io/gh/chenyunchen/go-gcs/branch/github%2Fdevelop/graph/badge.svg)](https://codecov.io/gh/chenyunchen/go-gcs)
+[![Docker Build Status](https://img.shields.io/docker/build/yunchen/go-gcs.svg)](https://hub.docker.com/r/yunchen/go-gcs/)
+
 * [1. Quck Start](#header_1)
 * [2. Overview](#header_2)
 * [3. API](#header_3)

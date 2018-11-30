@@ -16,6 +16,7 @@ import (
 	"google.golang.org/api/option"
 )
 
+// GoogleCloudStoragePublicBaseUrl is public url for download
 const GoogleCloudStoragePublicBaseUrl = "https://storage.googleapis.com"
 
 // Storage is the structure for config
@@ -111,6 +112,7 @@ func (s *Service) ResizeImageAndUpload(img image.Image, width uint, contentType,
 	return s.UploadImage(img, contentType, s.Config.ImageResizeBucket, path)
 }
 
+// ResizeMultiImageSizeAndUpload will resize multiple image and upload to google cloud storage
 func (s *Service) ResizeMultiImageSizeAndUpload(contentType, bucket, path string) (string, error) {
 	// Check if already resize origin image
 	imageResizeBucket := s.Config.ImageResizeBucket
