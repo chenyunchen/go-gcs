@@ -1,3 +1,5 @@
+## filemanager server version
+SERVER_VERSION = latest
 ## File name for executing
 FILE_NAME=file_manager
 ## Folder content generated files
@@ -58,3 +60,58 @@ src.test-coverage-minikube:
 	sed -i.bak "s/{{ projectId }}/$(PROJECTID)/g; s/{{ privateKeyId }}/$(PRIVATEKEYID)/g; s#{{ privateKey }}#$(PRIVATEKEY)#g; s/{{ clientEmail }}/$(CLIENTEMAIL)/g; s/{{ clientId }}/$(CLIENTID)/g; s#{{ clientCert }}#$(CLIENTCERT)#g; s/{{ jwtSecretKey }}/$(JWTSECRETKEY)/g;" config/testing.json
 	$(MAKE) src.test-coverage
 	mv config/testing.json.bak config/testing.json
+
+## launch apps #############################
+
+.PHONY: apps.init-helm
+apps.init-helm:
+	helm init
+	kubectl create serviceaccount --namespace kube-system tiller
+	kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+	kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
+
+.PHONY: apps.launch-dev
+apps.launch-dev:
+	yq -y .services deployment/helm/config/development.yaml | helm install --name filemanager-services-dev --debug --wait -f - deployment/helm/services
+	kubectl create configmap filemanager-config --from-file=config/ -n filemanager
+	yq -y .apps deployment/helm/config/development.yaml | helm install --name filemanager-apps-dev --debug --wait -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
+
+.PHONY: apps.launch-prod
+apps.launch-prod:
+	yq -y .services deployment/helm/config/production.yaml | helm install --name filemanager-services-prod --debug --wait -f - deployment/helm/services
+	yq -y .apps deployment/helm/config/production.yaml | helm install --name filemanager-apps-prod --debug --wait -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
+
+.PHONY: apps.upgrade-dev
+apps.upgrade-dev:
+	yq -y .services deployment/helm/config/development.yaml | helm upgrade filemanager-services-dev --debug -f - deployment/helm/services
+	yq -y .apps deployment/helm/config/development.yaml | helm  upgrade filemanager-apps-dev --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
+
+.PHONY: apps.upgrade-prod
+apps.upgrade-prod:
+	yq -y .services deployment/helm/config/production.yaml | helm upgrade filemanager-services-prod --debug -f - deployment/helm/services
+	yq -y .apps deployment/helm/config/production.yaml | helm  upgrade filemanager-apps-prod --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
+
+.PHONY: apps.teardown-dev
+apps.teardown-dev:
+	helm delete --purge filemanager-services-dev
+	helm delete --purge filemanager-apps-dev
+	kubectl delete configmap -n filemanager
+
+.PHONY: apps.teardown-prod
+apps.teardown-prod:
+	helm delete --purge filemanager-services-prod
+	helm delete --purge filemanager-apps-prod
+
+## dockerfiles/ ########################################
+
+.PHONY: dockerfiles.build
+dockerfiles.build:
+	docker build --tag yunchen/go-gcs:$(SERVER_VERSION) .
+
+## git tag version ########################################
+
+.PHONY: push.tag
+push.tag:
+	@echo "Current git tag version:"$(SERVER_VERSION)
+	git tag $(SERVER_VERSION)
+	git push --tags

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: filemanager-server
+  namespace: filemanager
+  labels:
+    app: filemanager-server
+spec:
+  type: NodePort
+  ports:
+    - name: apiserver
+      protocol: TCP
+      port: 7890
+      targetPort: 7890
+      nodePort: {{ .Values.service.ports.apiserverNodePort }}
+  selector:
+    app: filemanager-server

@@ -1,0 +1,10 @@
+# go-gcs/deploy/helm/apps
+apps:
+  # go-gcs/deploy/helm/apps/charts/filemanager-server
+  filemanager:
+    controller:
+      replicaCount: 1
+      apiserverImageTag: latest
+    service:
+      ports:
+        apiserverNodePort: 32326
