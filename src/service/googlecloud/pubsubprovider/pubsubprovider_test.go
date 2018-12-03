@@ -3,13 +3,11 @@ package pubsubprovider
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"os"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/suite"
-	"go-gcs/src/imageresize"
 	"go-gcs/src/service/googlecloud"
 	"go-gcs/src/service/googlecloud/storageprovider"
 )
@@ -74,16 +72,6 @@ func (suite *GoogleCloudPubSubProviderSuite) TestNotifyFromGCSStorage() {
 	bucket := storageService.Config.Bucket
 	path := "test/cat.jpg"
 	filePath := "../../../../test/image/cat.jpg"
-	contentType := "image/jpeg"
 	err = storageService.Upload(bucket, path, filePath)
-	suite.NoError(err)
-
-	// Wait for resize image
-	time.Sleep(5 * time.Second)
-
-	imageResizeBucket := storageService.Config.ImageResizeBucket
-	resizeUrl := fmt.Sprintf("%s/%s/%s", storageprovider.GoogleCloudStoragePublicBaseUrl, imageResizeBucket, path)
-	img, err := imageresize.DownloadImageFromUrl(resizeUrl, contentType)
-	suite.NotNil(img)
 	suite.NoError(err)
 }

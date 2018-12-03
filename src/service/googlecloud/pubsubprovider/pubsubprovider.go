@@ -26,6 +26,7 @@ type Service struct {
 	Context context.Context
 }
 
+// GoogleCloudStorageNotification is the structure for notification
 type GoogleCloudStorageNotification struct {
 	Name        string `json:"name" validate:"required"`
 	Bucket      string `json:"bucket" validate:"required"`
@@ -34,12 +35,15 @@ type GoogleCloudStorageNotification struct {
 
 // NotifyFromGCSStorage will call if google cloud storage object update
 func (s *Service) NotifyFromGCSStorage(sp *storageprovider.Service) {
+	var sub *pubsub.Subscription
 	sub, err := s.Client.CreateSubscription(s.Context, s.Config.Subscription, pubsub.SubscriptionConfig{
 		Topic:       s.Client.Topic(s.Config.Topic),
 		AckDeadline: 20 * time.Second,
 	})
 	if err != nil {
 		logger.Warnf("error while create google cloud pubsub subscription: %s", err)
+		logger.Info("try to use the exist subscription...")
+		sub = s.Client.Subscription(s.Config.Subscription)
 	}
 
 	var mu sync.Mutex

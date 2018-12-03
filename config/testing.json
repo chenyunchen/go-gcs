@@ -1,0 +1,32 @@
+{
+  "googlecloud":{
+    "type": "service_account",
+    "project_id": "{{ projectId }}",
+    "private_key_id": "{{ privateKeyId }}",
+    "private_key": "{{ privateKey }}",
+    "client_email": "{{ clientEmail }}",
+    "client_id": "{{ clientId }}",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "{{ clientCert }}"
+  },
+  "storage": {
+    "bucket": "jkopay-test",
+    "imageResizeBucket": "jkopay-test_img_resize",
+    "contentLengthRange": "0,200000000"
+  },
+  "pubsub": {
+    "topic": "jello",
+    "subscription": "mySubscription"
+  },
+  "jwtSecretKey": "{{ jwtSecretKey }}",
+  "logger": {
+    "dir":"./logs",
+    "level":"info",
+    "maxAge":"720h",
+    "suffixPattern":".%Y%m%d",
+    "linkName":"access_log"
+  },
+  "version": "testing"
+}

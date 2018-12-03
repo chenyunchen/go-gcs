@@ -18,7 +18,7 @@ type GroupPayload struct {
 	GroupId string `json:"groupId" validate:"required"`
 }
 
-// SignedUrlRequest is the structure for signed url response
+// SignedUrl is the structure for signed url response
 type SignedUrl struct {
 	Url           string `json:"url" validate:"required"`
 	UploadHeaders `json:"uploadHeaders" validate:"required"`

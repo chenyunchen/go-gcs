@@ -28,7 +28,7 @@ func SignURL(sp *service.Container, path string, fileName string, contentType st
 
 	rand.Seed(time.Now().UnixNano())
 	r := strings.NewReplacer("/", ":")
-	b := make([]byte, 4) //equals 8 charachters
+	b := make([]byte, 4) //equals 8 characters
 	rand.Read(b)
 	hashFileName := fmt.Sprintf("%s_%s", hex.EncodeToString(b), r.Replace(fileName))
 

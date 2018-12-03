@@ -27,7 +27,7 @@ func init() {
 	Logger = logrus.New()
 }
 
-// Setup Logger in packge. Enable Logger after import
+// Setup Logger in package. Enable Logger after import
 func Setup(c LoggerConfig) {
 	if Logger == nil {
 		Logger = logrus.New()
