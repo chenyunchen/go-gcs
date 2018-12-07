@@ -1,2 +1,2 @@
 env: gcp-develop
-app_port: 443 
+app_port: 80
