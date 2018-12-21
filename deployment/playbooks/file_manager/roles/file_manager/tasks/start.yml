@@ -32,10 +32,10 @@
   become: True
   template: src=file_manager.service.j2 dest="/etc/systemd/system/file_manager.service"
 
-- name: Start file_manager.service
+- name: Restart file_manager.service
   become: True
   systemd:
-    state: started
+    state: restarted
     name: file_manager.service
   register: start_file_manager_server_res
 
