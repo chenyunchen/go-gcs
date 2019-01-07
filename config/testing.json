@@ -14,7 +14,8 @@
   "storage": {
     "bucket": "jkopay-test",
     "imageResizeBucket": "jkopay-test_img_resize",
-    "contentLengthRange": "0,200000000"
+    "contentLengthRange": "0,200000000",
+    "accessControl": "public-read"
   },
   "pubsub": {
     "topic": "jello",

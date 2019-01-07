@@ -23,7 +23,7 @@ func SignURL(sp *service.Container, path string, fileName string, contentType st
 		Method:         method,
 		Expires:        expires,
 		ContentType:    contentType,
-		Headers:        []string{"x-goog-content-length-range:" + sp.GoogleCloudStorage.Config.ContentLengthRange},
+		Headers:        []string{"x-goog-content-length-range:" + sp.GoogleCloudStorage.Config.ContentLengthRange, "x-goog-acl:public-read"},
 	}
 
 	rand.Seed(time.Now().UnixNano())
@@ -33,6 +33,7 @@ func SignURL(sp *service.Container, path string, fileName string, contentType st
 	hashFileName := fmt.Sprintf("%s_%s", hex.EncodeToString(b), r.Replace(fileName))
 
 	s, err := storage.SignedURL(sp.Config.Storage.Bucket, path+hashFileName, &opts)
+	fmt.Println(s)
 	if err != nil {
 		return su, err
 	}
@@ -48,6 +49,7 @@ func SignURL(sp *service.Container, path string, fileName string, contentType st
 		UploadHeaders: entity.UploadHeaders{
 			ContentType:        contentType,
 			ContentLengthRange: sp.GoogleCloudStorage.Config.ContentLengthRange,
+			AccessControl:      sp.GoogleCloudStorage.Config.AccessControl,
 		},
 		UploadQueries: entity.UploadQueries{
 			Expires:        queries["Expires"][0],

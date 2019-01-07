@@ -24,6 +24,7 @@ type Storage struct {
 	Bucket             string `json:"bucket"`
 	ImageResizeBucket  string `json:"imageResizeBucket"`
 	ContentLengthRange string `json:"contentLengthRange"`
+	AccessControl      string `json:"accessControl"`
 }
 
 // Service is the structure for service
@@ -71,8 +72,11 @@ func (s *Service) Upload(bucket, path, filePath string) error {
 	if _, err := io.Copy(w, r); err != nil {
 		return err
 	}
+	if err := w.Close(); err != nil {
+		return err
+	}
 
-	return w.Close()
+	return obj.ACL().Set(s.Context, storage.AllUsers, storage.RoleReader)
 }
 
 // Delete will call if need to delete google cloud storage object

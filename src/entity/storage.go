@@ -29,6 +29,7 @@ type SignedUrl struct {
 type UploadHeaders struct {
 	ContentType        string `json:"Content-Type" validate:"required"`
 	ContentLengthRange string `json:"x-goog-content-length-range" validate:"required"`
+	AccessControl      string `json:"x-goog-acl" validate:"required"`
 }
 
 // UploadQueries is the structure for upload query:
