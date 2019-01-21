@@ -36,6 +36,7 @@
   become: True
   systemd:
     state: restarted
+    daemon_reload: yes
     name: file_manager.service
   register: start_file_manager_server_res
 

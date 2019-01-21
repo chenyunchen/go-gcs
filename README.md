@@ -34,6 +34,17 @@ go test ./src/...
 go run src/cmd/gcs-server/main.go
 ```
 
+### Build
+
+```bash
+make build-linux
+```
+
+```bash
+cd deployment/playbooks/file_manager
+make start ENV=local
+```
+
 <a name="header_2"></a>
 ## Overview
 <a name="header_2"></a>

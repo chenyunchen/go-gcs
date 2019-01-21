@@ -43,7 +43,7 @@ zip:
 src.build:
 	$(GO) build -v ./src/...
 	$(MKDIR_P) $(BUILD_FOLDER)/src/cmd/filemanager/
-	$(GO) build -v -o $(BUILD_FOLDER)/src/cmd/filemanager/filemanager ./src/cmd/filemanager/...
+	$(GO) build -v -o $(BUILD_FOLDER)/src/cmd/filemanager/$(FILE_NAME) ./src/cmd/filemanager/...
 
 .PHONY: src.test
 src.test:
@@ -115,3 +115,7 @@ push.tag:
 	@echo "Current git tag version:"$(SERVER_VERSION)
 	git tag $(SERVER_VERSION)
 	git push --tags
+
+.PHONY: find_broken_links
+find_broken_links:
+	@find . -type l ! -exec test -e {} \; -print
