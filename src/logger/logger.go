@@ -75,7 +75,7 @@ func configure(logger *logrus.Logger, c LoggerConfig) {
 
 	writer, err := rotatelogs.New(
 		path.Join(dir, filePattern),
-		rotatelogs.WithLinkName(path.Join(dir, linkName)),
+		rotatelogs.WithLinkName(linkName),
 		rotatelogs.WithMaxAge(maxAge),
 		rotatelogs.WithRotationTime(time.Duration(24)*time.Hour),
 	)
