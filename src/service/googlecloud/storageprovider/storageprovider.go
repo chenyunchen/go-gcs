@@ -109,7 +109,7 @@ func (s *Service) UploadImage(img image.Image, contentType, bucket, path string)
 }
 
 // ResizeImageAndUpload will resize image and upload to google cloud storage
-func (s *Service) ResizeImageAndUpload(img image.Image, width uint, contentType, path string) error {
+func (s *Service) ResizeImageAndUpload(img image.Image, width int, contentType, path string) error {
 	img = imageresize.ResizeImage(img, width, 0)
 	path = fmt.Sprintf("%s_%d", path, width)
 

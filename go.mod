@@ -10,6 +10,7 @@ require (
 	github.com/davidrjenni/reftools v0.0.0-20180914123528-654d0ba4f96d // indirect
 	github.com/derekparker/delve v1.1.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/disintegration/imaging v1.6.0
 	github.com/emicklei/go-restful v2.8.0+incompatible
 	github.com/fatih/gomodifytags v0.0.0-20180914191908-141225bf62b6 // indirect
 	github.com/fatih/motion v0.0.0-20180408211639-218875ebe238 // indirect
@@ -36,6 +37,7 @@ require (
 	github.com/pkg/errors v0.8.0 // indirect
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/rogpeppe/godef v1.0.0 // indirect
+	github.com/rwcarlsen/goexif v0.0.0-20190107194617-b1fd11e07dc5
 	github.com/sirupsen/logrus v1.2.0
 	github.com/spf13/cobra v0.0.3 // indirect
 	github.com/spf13/pflag v1.0.3 // indirect
@@ -45,6 +47,7 @@ require (
 	github.com/zmb3/gogetdoc v0.0.0-20181026013253-9098cf5fc236 // indirect
 	go.opencensus.io v0.18.0 // indirect
 	golang.org/x/arch v0.0.0-20180920145803-b19384d3c130 // indirect
+	golang.org/x/image v0.0.0-20190227222117-0694c2d4d067 // indirect
 	golang.org/x/lint v0.0.0-20181026193005-c67002cb31c3 // indirect
 	golang.org/x/net v0.0.0-20181108082009-03003ca0c849 // indirect
 	golang.org/x/tools v0.0.0-20181113200934-7e59e591a261 // indirect
