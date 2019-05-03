@@ -4,11 +4,11 @@ apps:
   filemanager:
     controller:
       replicaCount: 1
-      image: gcr.io/jello-000001/file-manager
+      image: gcr.io/jello-stage-223210/file-manager
       apiserverImageTag: latest
       imagePullPolicy: IfNotPresent
     app:
-      config: production.json
+      config: staging.json
     service:
       ports:
         apiserverNodePort: 32326

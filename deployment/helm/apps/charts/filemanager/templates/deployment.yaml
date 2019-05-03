@@ -18,13 +18,16 @@ spec:
       serviceAccountName: filemanager-admin
       containers:
       - name: filemanager-server
-        image: yunchen/go-gcs:{{ .Values.controller.apiserverImageTag }}
+        image: {{ .Values.controller.image }}:{{ .Values.controller.apiserverImageTag }}
+        imagePullPolicy: {{ .Values.controller.imagePullPolicy }}
         ports:
         - containerPort: 7890
         volumeMounts:
         - name: config-volume
-          mountPath: /go-gcs/config
+          mountPath: /go-gcs/config/{{ .Values.app.config }}
+          subPath: {{ .Values.app.config }}
+          readOnly: true
       volumes:
         - name: config-volume
-          configMap:
-            name: filemanager-config
+          secret:
+            secretName: filemanager-config

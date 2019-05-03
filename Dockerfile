@@ -25,7 +25,7 @@ ENV GO111MODULE=on
 
 RUN go mod download
 RUN make src.build
-RUN mv build/src/cmd/filemanager/filemanager /go/bin
+RUN mv build/src/cmd/filemanager/file_manager /go/bin
 
 # Production stage
 FROM alpine:3.7
@@ -35,5 +35,9 @@ WORKDIR /go-gcs
 # copy the go binaries from the building stage
 COPY --from=0 /go/bin /go/bin
 
+# select the config file for deployment
+ARG CONFIG=config/local.json
+COPY ${CONFIG} config/local.json
+
 EXPOSE 7890
-ENTRYPOINT ["/go/bin/filemanager", "-port", "7890", "-config", "/go-gcs/config/develop.json"]
+ENTRYPOINT ["/go/bin/file_manager", "-port", "7890", "-config", "/go-gcs/config/local.json"]
