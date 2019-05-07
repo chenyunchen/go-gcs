@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"go-gcs/src/net/http"
 	"go-gcs/src/service"
+	h "net/http"
 )
 
 // AppRoute will add router
@@ -15,6 +16,7 @@ func (a *App) AppRoute() *mux.Router {
 	container.Add(newPreviewService(a.Service))
 
 	router := mux.NewRouter()
+	router.HandleFunc("/", func(w h.ResponseWriter, r *h.Request) {})
 	router.PathPrefix("/v1/").Handler(container)
 
 	return router

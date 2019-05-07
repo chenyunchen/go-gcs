@@ -11,3 +11,4 @@ vagrant/credentials
 .idea
 /file_manager
 /config
+**/secret

@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: filemanager-server
+  namespace: filemanager
+  annotations:
+    ingress.gcp.kubernetes.io/pre-shared-cert: {{ .Values.ingress.cert }}
+    kubernetes.io/ingress.global-static-ip-name: {{ .Values.ingress.ipName }}
+    kubernetes.io/ingress.allow-http: "false"
+spec:
+  backend:
+    serviceName: filemanager-server
+    servicePort: 7890

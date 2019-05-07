@@ -6,9 +6,12 @@ apps:
       replicaCount: 1
       image: gcr.io/jello-test-222701/file-manager
       apiserverImageTag: latest
-      imagePullPolicy: IfNotPresent
+      imagePullPolicy: Always
     app:
       config: develop.json
     service:
       ports:
         apiserverNodePort: 32326
+    ingress:
+      cert: "dev-jellotalk-com"
+      ipName: "lb-dev-file-gke"

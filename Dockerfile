@@ -37,7 +37,7 @@ COPY --from=0 /go/bin /go/bin
 
 # select the config file for deployment
 ARG CONFIG=config/local.json
-COPY ${CONFIG} config/local.json
+ENV CONFIG=/go-gcs/$CONFIG
 
 EXPOSE 7890
-ENTRYPOINT ["/go/bin/file_manager", "-port", "7890", "-config", "/go-gcs/config/local.json"]
+ENTRYPOINT /go/bin/file_manager -port 7890 -config $CONFIG

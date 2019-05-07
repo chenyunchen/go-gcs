@@ -78,59 +78,39 @@ apps.init-helm:
 	kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
 	kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
 
-.PHONY: apps.launch-local
-apps.launch-local:
+.PHONY: apps.install-local
+apps.install-local:
 	$(call generate_filemanager-config,local)
-	yq -y .services deployment/helm/config/local.yaml | helm install --name filemanager-services-local --debug --wait -f - deployment/helm/services
-	yq -y .apps deployment/helm/config/local.yaml | helm install --name filemanager-apps-local --debug --wait -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
+	yq -y .services deployment/helm/config/local.yaml | helm upgrade --install filemanager-services-local --debug -f - deployment/helm/services
+	yq -y .apps deployment/helm/config/local.yaml | helm upgrade --install filemanager-apps-local --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
 
-.PHONY: apps.launch-dev
-apps.launch-dev:
+.PHONY: apps.install-dev
+apps.install-dev:
 	$(call generate_gcr-registry-key,develop)
 	$(call generate_filemanager-config,develop)
-	yq -y .services deployment/helm/config/development.yaml | helm install --name filemanager-services-dev --debug --wait -f - deployment/helm/services
-	yq -y .apps deployment/helm/config/development.yaml | helm install --name filemanager-apps-dev --debug --wait -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
+	yq -y .services deployment/helm/config/development.yaml | helm upgrade --install filemanager-services-dev --debug -f - deployment/helm/services
+	yq -y .apps deployment/helm/config/development.yaml | helm upgrade --install filemanager-apps-dev --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
 
-.PHONY: apps.launch-stage
-apps.launch-stage:
+.PHONY: apps.install-stage
+apps.install-stage:
 	$(call generate_gcr-registry-key,staging)
 	$(call generate_filemanager-config,staging)
-	yq -y .services deployment/helm/config/staging.yaml | helm install --name filemanager-services-stage --debug --wait -f - deployment/helm/services
-	yq -y .apps deployment/helm/config/staging.yaml | helm install --name filemanager-apps-stage --debug --wait -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
+	yq -y .services deployment/helm/config/staging.yaml | helm upgrade --install filemanager-services-stage --debug -f - deployment/helm/services
+	yq -y .apps deployment/helm/config/staging.yaml | helm upgrade --install filemanager-apps-stage --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
 
-.PHONY: apps.launch-prod
-apps.launch-prod:
+.PHONY: apps.install-rc
+apps.install-rc:
+	$(call generate_gcr-registry-key,rc)
+	$(call generate_filemanager-config,rc)
+	yq -y .services deployment/helm/config/rc.yaml | helm upgrade --install filemanager-services-rc --debug -f - deployment/helm/services
+	yq -y .apps deployment/helm/config/rc.yaml | helm upgrade --install filemanager-apps-rc --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
+
+.PHONY: apps.install-prod
+apps.install-prod:
 	$(call generate_gcr-registry-key,production)
 	$(call generate_filemanager-config,production)
-	yq -y .services deployment/helm/config/production.yaml | helm install --name filemanager-services-prod --debug --wait -f - deployment/helm/services
-	yq -y .apps deployment/helm/config/production.yaml | helm install --name filemanager-apps-prod --debug --wait -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
-
-.PHONY: apps.upgrade-local
-apps.upgrade-local:
-	$(call generate_filemanager-config,local)
-	yq -y .services deployment/helm/config/local.yaml | helm upgrade filemanager-services-local --debug -f - deployment/helm/services
-	yq -y .apps deployment/helm/config/local.yaml | helm  upgrade filemanager-apps-local --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
-
-.PHONY: apps.upgrade-dev
-apps.upgrade-dev:
-	$(call generate_gcr-registry-key,develop)
-	$(call generate_filemanager-config,develop)
-	yq -y .services deployment/helm/config/development.yaml | helm upgrade filemanager-services-dev --debug -f - deployment/helm/services
-	yq -y .apps deployment/helm/config/development.yaml | helm  upgrade filemanager-apps-dev --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
-
-.PHONY: apps.upgrade-stage
-apps.upgrade-stage:
-	$(call generate_gcr-registry-key,staging)
-	$(call generate_filemanager-config,staging)
-	yq -y .services deployment/helm/config/staging.yaml | helm upgrade filemanager-services-stage --debug -f - deployment/helm/services
-	yq -y .apps deployment/helm/config/staging.yaml | helm  upgrade filemanager-apps-stage --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
-
-.PHONY: apps.upgrade-prod
-apps.upgrade-prod:
-	$(call generate_gcr-registry-key,production)
-	$(call generate_filemanager-config,production)
-	yq -y .services deployment/helm/config/production.yaml | helm upgrade filemanager-services-prod --debug -f - deployment/helm/services
-	yq -y .apps deployment/helm/config/production.yaml | helm  upgrade filemanager-apps-prod --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
+	yq -y .services deployment/helm/config/production.yaml | helm upgrade --install filemanager-services-prod --debug -f - deployment/helm/services
+	yq -y .apps deployment/helm/config/production.yaml | helm upgrade --install filemanager-apps-prod --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
 
 .PHONY: apps.teardown-local
 apps.teardown-local:
@@ -147,6 +127,11 @@ apps.teardown-stage:
 	helm delete --purge filemanager-services-stage
 	helm delete --purge filemanager-apps-stage
 
+.PHONY: apps.teardown-rc
+apps.teardown-rc:
+	helm delete --purge filemanager-services-rc
+	helm delete --purge filemanager-apps-rc
+
 .PHONY: apps.teardown-prod
 apps.teardown-prod:
 	helm delete --purge filemanager-services-prod
@@ -161,14 +146,22 @@ dockerfiles.build-local:
 .PHONY: dockerfiles.build-dev
 dockerfiles.build-dev:
 	docker build --build-arg CONFIG=config/develop.json --tag gcr.io/jello-test-222701/file-manager:$(SERVER_VERSION) .
+	docker push gcr.io/jello-test-222701/file-manager:$(SERVER_VERSION)
 
 .PHONY: dockerfiles.build-stage
 dockerfiles.build-stage:
 	docker build --build-arg CONFIG=config/staging.json --tag gcr.io/jello-stage-223210/file-manager:$(SERVER_VERSION) .
+	docker push gcr.io/jello-stage-223210/file-manager:$(SERVER_VERSION)
+
+.PHONY: dockerfiles.build-rc
+dockerfiles.build-rc:
+	docker build --build-arg CONFIG=config/rc.json --tag gcr.io/jello-stage-223210/file-manager:$(SERVER_VERSION) .
+	docker push gcr.io/jello-stage-223210/file-manager:$(SERVER_VERSION)
 
 .PHONY: dockerfiles.build-prod
 dockerfiles.build-prod:
 	docker build --build-arg CONFIG=config/production.json --tag gcr.io/jello-000001/file-manager:$(SERVER_VERSION) .
+	docker push gcr.io/jello-000001/file-manager:$(SERVER_VERSION)
 
 ## git tag version ########################################
 

@@ -4,14 +4,14 @@ apps:
   filemanager:
     controller:
       replicaCount: 1
-      image: gcr.io/jello-000001/file-manager
+      image: gcr.io/jello-stage-223210/file-manager
       apiserverImageTag: latest
       imagePullPolicy: Always
     app:
-      config: production.json
+      config: rc.json
     service:
       ports:
         apiserverNodePort: 32326
     ingress:
-      cert: "jellotalk-com"
-      ipName: "lb-file-gke"
+      cert: "dev-jellotalk-com"
+      ipName: "lb-rc-file-gke"

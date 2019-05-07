@@ -12,3 +12,6 @@ apps:
     service:
       ports:
         apiserverNodePort: 32326
+    ingress:
+      cert: ""
+      ipname: ""
