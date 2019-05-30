@@ -5,7 +5,7 @@ require (
 	cloud.google.com/go v0.32.0
 	github.com/alecthomas/gometalinter v2.0.11+incompatible // indirect
 	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
-	github.com/chenyunchen/goscraper v0.0.0-20181203065544-42a7d35f86ce
+	github.com/chenyunchen/goscraper v0.0.0-20190529030154-38583acf2c80
 	github.com/cosiner/argv v0.0.0-20181111161405-36fdb9e0bb2d // indirect
 	github.com/davidrjenni/reftools v0.0.0-20180914123528-654d0ba4f96d // indirect
 	github.com/derekparker/delve v1.1.0 // indirect
