@@ -7,6 +7,7 @@ BUILD_FOLDER = ./build
 ## command
 GO           = go
 MKDIR_P      = mkdir -p
+TIMESTAMP    = $(shell date +%s)
 
 ################################################
 
@@ -82,35 +83,35 @@ apps.init-helm:
 apps.install-local:
 	$(call generate_filemanager-config,local)
 	yq -y .services deployment/helm/config/local.yaml | helm upgrade --install filemanager-services-local --debug -f - deployment/helm/services
-	yq -y .apps deployment/helm/config/local.yaml | helm upgrade --install filemanager-apps-local --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
+	yq -y .apps deployment/helm/config/local.yaml | helm upgrade --install filemanager-apps-local --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION),filemanager-server.controller.timestamp=$(TIMESTAMP) deployment/helm/apps
 
 .PHONY: apps.install-dev
 apps.install-dev:
 	$(call generate_gcr-registry-key,develop)
 	$(call generate_filemanager-config,develop)
 	yq -y .services deployment/helm/config/development.yaml | helm upgrade --install filemanager-services-dev --debug -f - deployment/helm/services
-	yq -y .apps deployment/helm/config/development.yaml | helm upgrade --install filemanager-apps-dev --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
+	yq -y .apps deployment/helm/config/development.yaml | helm upgrade --install filemanager-apps-dev --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION),filemanager-server.controller.timestamp=$(TIMESTAMP) deployment/helm/apps
 
 .PHONY: apps.install-stage
 apps.install-stage:
 	$(call generate_gcr-registry-key,staging)
 	$(call generate_filemanager-config,staging)
 	yq -y .services deployment/helm/config/staging.yaml | helm upgrade --install filemanager-services-stage --debug -f - deployment/helm/services
-	yq -y .apps deployment/helm/config/staging.yaml | helm upgrade --install filemanager-apps-stage --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
+	yq -y .apps deployment/helm/config/staging.yaml | helm upgrade --install filemanager-apps-stage --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION),filemanager-server.controller.timestamp=$(TIMESTAMP) deployment/helm/apps
 
 .PHONY: apps.install-rc
 apps.install-rc:
 	$(call generate_gcr-registry-key,rc)
 	$(call generate_filemanager-config,rc)
 	yq -y .services deployment/helm/config/rc.yaml | helm upgrade --install filemanager-services-rc --debug -f - deployment/helm/services
-	yq -y .apps deployment/helm/config/rc.yaml | helm upgrade --install filemanager-apps-rc --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
+	yq -y .apps deployment/helm/config/rc.yaml | helm upgrade --install filemanager-apps-rc --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION),filemanager-server.controller.timestamp=$(TIMESTAMP) deployment/helm/apps
 
 .PHONY: apps.install-prod
 apps.install-prod:
 	$(call generate_gcr-registry-key,production)
 	$(call generate_filemanager-config,production)
 	yq -y .services deployment/helm/config/production.yaml | helm upgrade --install filemanager-services-prod --debug -f - deployment/helm/services
-	yq -y .apps deployment/helm/config/production.yaml | helm upgrade --install filemanager-apps-prod --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION) deployment/helm/apps
+	yq -y .apps deployment/helm/config/production.yaml | helm upgrade --install filemanager-apps-prod --debug -f - --set filemanager-server.controller.apiserverImageTag=$(SERVER_VERSION),filemanager-server.controller.timestamp=$(TIMESTAMP) deployment/helm/apps
 
 .PHONY: apps.teardown-local
 apps.teardown-local:

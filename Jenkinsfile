@@ -37,10 +37,60 @@ def sendSlackFixedMessage() {
     slackSend channel: '#backend-ci', color: 'good', message: message
 }
 
+def setEnv(String env) {
+  switch (env) {
+    case "origin/develop":
+      return "dev"
+    case "origin/master":
+      return "rc"
+    default:
+      return "local"
+  }
+}
+
+def setKubeConfig(String env) {
+  switch (env) {
+    case "origin/develop":
+      return "/Users/jello/.jenkins/workspace/jello-kubernetes/ansible/configs/config.jello.dev"
+    case "origin/master":
+      return "/Users/jello/.jenkins/workspace/jello-kubernetes/ansible/configs/config.jello.rc"
+    default:
+      return "/Users/jello/.jenkins/workspace/jello-kubernetes/ansible/configs/config.jello.minikube"
+  }
+}
+
+def setGCRAccount(String env) {
+  switch (env) {
+    case "origin/develop":
+        return "dev-cms@jello-test-222701.iam.gserviceaccount.com"
+    case "origin/master":
+        return "stage-storge@jello-stage-223210.iam.gserviceaccount.com"
+    default:
+        return ""
+  }
+}
+
+def setGKEAccount(String env) {
+  switch (env) {
+    case "origin/develop":
+        return "jello-dev-admin@jello-test-222701.iam.gserviceaccount.com"
+    case "origin/master":
+        return "jello-stg-admin@jello-stage-223210.iam.gserviceaccount.com"
+    default:
+        return ""
+  }
+}
+
 pipeline {
     agent any
     options {
          gitLabConnection('Gitlab')
+    }
+    environment {
+        ENV = setEnv(env.GIT_BRANCH)
+        KUBECONFIG = setKubeConfig(env.GIT_BRANCH)
+        GCR_ACCOUNT = setGCRAccount(env.GIT_BRANCH)
+        GKE_ACCOUNT = setGKEAccount(env.GIT_BRANCH)
     }
     post {
         fixed {

@@ -5,6 +5,8 @@ metadata:
   namespace: filemanager
   labels:
     app: filemanager-server
+  annotations:
+    timestamp: "{{ .Values.controller.timestamp }}"
 spec:
   replicas: {{ .Values.controller.replicaCount }}
   selector:
