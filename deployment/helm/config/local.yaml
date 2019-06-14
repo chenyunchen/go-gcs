@@ -14,5 +14,5 @@ apps:
       ports:
         apiserverNodePort: 32326
     ingress:
-      cert: "dev-jellotalk-com"
-      ipName: "lb-dev-file-gke"
+      cert: "local"
+      ipName: "local"

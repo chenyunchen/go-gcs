@@ -51,11 +51,11 @@ def setEnv(String env) {
 def setKubeConfig(String env) {
   switch (env) {
     case "origin/develop":
-      return "/Users/jello/.jenkins/workspace/jello-kubernetes/ansible/configs/config.jello.dev"
+      return "/Users/jello/.jenkins/workspace/JelloServers/jello-kubernetes/ansible/configs/config.jello.dev"
     case "origin/master":
-      return "/Users/jello/.jenkins/workspace/jello-kubernetes/ansible/configs/config.jello.rc"
+      return "/Users/jello/.jenkins/workspace/JelloServers/jello-kubernetes/ansible/configs/config.jello.rc"
     default:
-      return "/Users/jello/.jenkins/workspace/jello-kubernetes/ansible/configs/config.jello.minikube"
+      return "/Users/jello/.jenkins/workspace/JelloServers/jello-kubernetes/ansible/configs/config.jello.minikube"
   }
 }
 
