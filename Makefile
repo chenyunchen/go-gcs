@@ -144,24 +144,28 @@ apps.teardown-prod:
 dockerfiles.build-local:
 	docker build --build-arg CONFIG=config/local.json --tag yunchen/file-manager:$(SERVER_VERSION) .
 
+.PHONY: dockerfiles.build-local.minikube
+dockerfiles.build-local.minikube:
+	eval $(minikube docker-env) && make dockerfiles.build-local
+
 .PHONY: dockerfiles.build-dev
 dockerfiles.build-dev:
-	docker build --build-arg CONFIG=config/develop.json --tag gcr.io/jello-test-222701/file-manager:$(SERVER_VERSION) .
+	docker build --cache-from=gcr.io/jello-test-222701/file-manager --build-arg CONFIG=config/develop.json --tag gcr.io/jello-test-222701/file-manager:$(SERVER_VERSION) .
 	docker push gcr.io/jello-test-222701/file-manager:$(SERVER_VERSION)
 
 .PHONY: dockerfiles.build-stage
 dockerfiles.build-stage:
-	docker build --build-arg CONFIG=config/staging.json --tag gcr.io/jello-stage-223210/file-manager:$(SERVER_VERSION) .
+	docker build --cache-from=gcr.io/jello-stage-223210/file-manager --build-arg CONFIG=config/staging.json --tag gcr.io/jello-stage-223210/file-manager:$(SERVER_VERSION) .
 	docker push gcr.io/jello-stage-223210/file-manager:$(SERVER_VERSION)
 
 .PHONY: dockerfiles.build-rc
 dockerfiles.build-rc:
-	docker build --build-arg CONFIG=config/rc.json --tag gcr.io/jello-stage-223210/file-manager:$(SERVER_VERSION) .
+	docker build --cache-from=gcr.io/jello-stage-223210/file-manager --build-arg CONFIG=config/rc.json --tag gcr.io/jello-stage-223210/file-manager:$(SERVER_VERSION) .
 	docker push gcr.io/jello-stage-223210/file-manager:$(SERVER_VERSION)
 
 .PHONY: dockerfiles.build-prod
 dockerfiles.build-prod:
-	docker build --build-arg CONFIG=config/production.json --tag gcr.io/jello-000001/file-manager:$(SERVER_VERSION) .
+	docker build --cache-from=gcr.io/jello-000001/file-manager --build-arg CONFIG=config/production.json --tag gcr.io/jello-000001/file-manager:$(SERVER_VERSION) .
 	docker push gcr.io/jello-000001/file-manager:$(SERVER_VERSION)
 
 ## git tag version ########################################
