@@ -146,7 +146,7 @@ dockerfiles.build-local:
 
 .PHONY: dockerfiles.build-local.minikube
 dockerfiles.build-local.minikube:
-	eval $(minikube docker-env) && make dockerfiles.build-local
+	eval $$(minikube docker-env) && make dockerfiles.build-local
 
 .PHONY: dockerfiles.build-dev
 dockerfiles.build-dev:
