@@ -34,7 +34,7 @@ def sendSlackFixedMessage() {
         "<${env.RUN_DISPLAY_URL}|#${env.BUILD_NUMBER}> is fixed " +
         "after ${getFailureCount()} failed builds."
 
-    slackSend channel: '#backend-ci', color: 'good', message: message
+    slackSend channel: '#jello_backend_ci', color: 'good', message: message
 }
 
 def setEnv(String env) {
