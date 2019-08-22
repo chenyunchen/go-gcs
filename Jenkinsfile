@@ -10,7 +10,7 @@ def getFailureCount() {
 def sendSlackFailureMessage(String stage) {
 
     def message =
-        "<http://192.168.11.49:8080/job/FileManager/|FileManager> » stage `${stage}` failed " +
+        "<http://192.168.11.49:8080/job/JelloServers|jello-file-manager> » stage `${stage}` failed " +
         "<${env.JOB_URL}|${env.GIT_BRANCH}> » " +
         "<${env.RUN_DISPLAY_URL}|#${env.BUILD_NUMBER}>."
 
@@ -29,7 +29,7 @@ def sendSlackFailureMessage(String stage) {
 
 def sendSlackFixedMessage() {
     def message =
-        "<http://192.168.11.49:8080/job/FileManager/|FileManager> » " +
+        "<http://192.168.11.49:8080/job/JelloServers|jello-file-manager> » " +
         "<${env.JOB_URL}|${env.GIT_BRANCH}> » " +
         "<${env.RUN_DISPLAY_URL}|#${env.BUILD_NUMBER}> is fixed " +
         "after ${getFailureCount()} failed builds."
