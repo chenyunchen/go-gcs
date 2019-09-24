@@ -1,5 +1,7 @@
 module go-gcs
 
+replace git.apache.org/thrift.git => github.com/apache/thrift v0.0.0-20180902110319-2566ecd5d999
+
 require (
 	9fans.net/go v0.0.0-20181112161441-237454027057 // indirect
 	cloud.google.com/go v0.32.0
