@@ -5,14 +5,14 @@ apps:
     controller:
       replicaCount: 1
       image: gcr.io/jello-stage-223210/file-manager
-      apiserverImageTag: latest
+      apiserverImageTag: stage-latest
       imagePullPolicy: Always
       timestamp: 0
     app:
-      config: rc.json
+      config: staging.json
     service:
       ports:
         apiserverNodePort: 32326
     ingress:
       cert: "dev-jellotalk-com"
-      ipName: "lb-rc-file-gke"
+      ipName: "lb-stg-file-gke"

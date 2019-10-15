@@ -1,8 +1,0 @@
-file1 ansible_ssh_host=35.229.217.128 ansible_ssh_port=22 ansible_ssh_user=jello-backend ansible_ssh_private_key_file=~/.ssh/jello-backend-key
-file2 ansible_ssh_host=35.221.142.74 ansible_ssh_port=22 ansible_ssh_user=jello-backend ansible_ssh_private_key_file=~/.ssh/jello-backend-key
-file3 ansible_ssh_host=35.234.9.132 ansible_ssh_port=22 ansible_ssh_user=jello-backend ansible_ssh_private_key_file=~/.ssh/jello-backend-key
-
-[file_manager_host]
-file1
-file2
-file3

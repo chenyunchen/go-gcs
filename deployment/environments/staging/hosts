@@ -1,1 +1,0 @@
-file_manager_host ansible_ssh_host=13.115.3.95 ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_private_key_file=~/.ssh/login.pem

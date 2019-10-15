@@ -5,7 +5,7 @@ apps:
     controller:
       replicaCount: 1
       image: gcr.io/jello-test-222701/file-manager
-      apiserverImageTag: latest
+      apiserverImageTag: dev-latest
       imagePullPolicy: Always
       timestamp: 0
     app:

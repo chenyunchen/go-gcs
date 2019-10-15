@@ -1,5 +1,0 @@
-- name: Stop file_manager.service
-  become: True
-  systemd:
-    state: stopped
-    name: file_manager.service

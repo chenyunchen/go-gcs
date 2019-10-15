@@ -1,2 +1,0 @@
-- name: Create file_manager.service
-  local_action: template src=file_manager.service.j2 dest="generated/{{ env }}/file_manager.service"
